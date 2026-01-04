@@ -4,6 +4,7 @@ console.log('Anfloral Script Loaded');
 const projectData = {
     'villa-tropika': {
         title: 'Villa Tropika',
+        subtitle: 'RESIDENTIAL • MODERN TROPICAL • LANGKAWI',
         description: 'Transformasi resort peribadi di Langkawi. Kami menggunakan kombinasi pokok kelapa eksotik dan lanskap lembut untuk mencipta suasana hutan hujan tropika yang menyejukkan. Setiap sudut dirancang untuk privasi dan ketenangan.',
         duration: '21 Hari',
         plants: '120+ Spesies',
@@ -11,6 +12,7 @@ const projectData = {
     },
     'vertical-garden': {
         title: 'Vertical Garden KL',
+        subtitle: 'CORPORATE • SUSTAINABLE • KUALA LUMPUR',
         description: 'Dinding hijau vertikal di tengah pusat bandar Kuala Lumpur. Menggunakan sistem pengairan automatik untuk memastikan lumut dan tanaman sentiasa subur walaupun di dalam ruang tertutup pejabat korporat.',
         duration: '7 Hari',
         plants: '1500+ Tanaman',
@@ -18,6 +20,7 @@ const projectData = {
     },
     'zen-garden': {
         title: 'Zen Garden Ipoh',
+        subtitle: 'MINIMALIST • ZEN • IPOH PERAK',
         description: 'Konsep minimalis Jepun yang menenangkan. Kami mengimport batuan sungai khas dan menggabungkan seni pasir (gravel) dengan pokok Juniperus Taiwan untuk mencipta ruang meditasi yang estetik.',
         duration: '10 Hari',
         plants: '15 Spesies',
@@ -25,14 +28,7 @@ const projectData = {
     }
 };
 
-// --- CORE FUNCTIONS ---
-
-function whatsAppOrder(item) {
-    const baseUrl = "https://wa.me/60134085923?text=";
-    const message = `Hi Anfloral, saya berminat dengan ${item}.`;
-    const finalUrl = `${baseUrl}${encodeURIComponent(message)}`;
-    window.open(finalUrl, '_blank');
-}
+// ... (keep previous functions)
 
 function openProject(id, el) {
     console.log('Attempting to open project:', id);
@@ -43,21 +39,14 @@ function openProject(id, el) {
     const ribbonTrack = document.getElementById('ribbonTrack');
     const detailContent = document.getElementById('detailContent');
     const detailNav = document.querySelector('.detail-nav');
+    const heroMarquee = document.getElementById('heroMarquee');
 
-    if (!overlay || !ribbonTrack || !detailContent || !detailNav) {
-        console.error('One or more detail elements not found in DOM');
-        return;
-    }
+    if (!overlay || !ribbonTrack || !detailContent || !detailNav) return;
 
-    // Update URL without reload
-    try {
-        history.pushState({ projectId: id }, '', `${id}.html`);
-    } catch (e) { console.warn(e); }
+    // Update URL
+    try { history.pushState({ projectId: id }, '', `${id}.html`); } catch (e) { }
 
-    // 1. Calculate Rect
     const rect = el.getBoundingClientRect();
-
-    // 2. Create Expander
     const expander = document.createElement('div');
     expander.className = 'card-expander';
     Object.assign(expander.style, {
@@ -71,27 +60,29 @@ function openProject(id, el) {
     });
     document.body.appendChild(expander);
 
-    // 3. Prepare Content
+    // Prepare Content
     document.getElementById('detailTitle').innerText = data.title;
     document.getElementById('detailDescription').innerText = data.description;
     document.getElementById('detailDuration').innerText = data.duration;
     document.getElementById('detailPlants').innerText = data.plants;
+    heroMarquee.innerHTML = `<span>${data.subtitle}</span> • <span>${data.subtitle}</span> • <span>${data.subtitle}</span>`;
 
+    // Inject Images (Manual Carousel - No Infinite loop clone)
     ribbonTrack.innerHTML = '';
-    for (let i = 1; i <= 8; i++) {
+    const themes = ['nature', 'garden', 'plants', 'landscape', 'architecture'];
+    for (let i = 0; i < 6; i++) {
         const img = document.createElement('img');
-        img.src = `https://placehold.co/600x800/${data.color.replace('#', '')}/FFF?text=${data.title}+${i}`;
+        img.src = `https://placehold.co/1200x800/${data.color.replace('#', '')}/FFF?text=${themes[i % themes.length]}+${i+1}`;
         ribbonTrack.appendChild(img);
     }
-    ribbonTrack.innerHTML += ribbonTrack.innerHTML;
+    ribbonTrack.style.transform = 'translateX(0)';
 
-    // 4. Animation
-    requestAnimationFrame(() => {
-        expander.classList.add('expanding');
-    });
+    // Animation
+    requestAnimationFrame(() => expander.classList.add('expanding'));
 
     setTimeout(() => {
         overlay.classList.add('active');
+        overlay.scrollTop = 0;
         detailContent.classList.add('visible');
         detailNav.classList.add('visible');
         document.body.style.overflow = 'hidden';
@@ -101,6 +92,51 @@ function openProject(id, el) {
         expander.style.opacity = '0';
         setTimeout(() => expander.remove(), 500);
     }, 1000);
+
+    // --- INTERNAL HEADER DRAG ---
+    let isHeaderDragging = false;
+    let headerStartX;
+    let headerScrollLeft = 0;
+
+    const headerContainer = document.querySelector('.kinetic-header');
+    
+    headerContainer.onmousedown = (e) => {
+        isHeaderDragging = true;
+        headerStartX = e.pageX - ribbonTrack.offsetLeft;
+    };
+
+    window.addEventListener('mousemove', (e) => {
+        if (!isHeaderDragging) return;
+        const x = e.pageX - headerContainer.offsetLeft;
+        const walk = (x - headerStartX) * 1.5;
+        headerScrollLeft = walk;
+        
+        // Boundaries
+        const maxScroll = ribbonTrack.scrollWidth - window.innerWidth;
+        if (headerScrollLeft > 0) headerScrollLeft = 0;
+        if (headerScrollLeft < -maxScroll) headerScrollLeft = -maxScroll;
+        
+        ribbonTrack.style.transform = `translateX(${headerScrollLeft}px)`;
+    });
+
+    window.addEventListener('mouseup', () => isHeaderDragging = false);
+    
+    // Touch
+    headerContainer.ontouchstart = (e) => {
+        isHeaderDragging = true;
+        headerStartX = e.touches[0].pageX - ribbonTrack.offsetLeft;
+    };
+    window.addEventListener('touchmove', (e) => {
+        if (!isHeaderDragging) return;
+        const x = e.touches[0].pageX - headerContainer.offsetLeft;
+        const walk = (x - headerStartX) * 1.5;
+        headerScrollLeft = walk;
+        const maxScroll = ribbonTrack.scrollWidth - window.innerWidth;
+        if (headerScrollLeft > 0) headerScrollLeft = 0;
+        if (headerScrollLeft < -maxScroll) headerScrollLeft = -maxScroll;
+        ribbonTrack.style.transform = `translateX(${headerScrollLeft}px)`;
+    });
+    window.addEventListener('touchend', () => isHeaderDragging = false);
 }
 
 function closeProject(isBackAction = false) {
