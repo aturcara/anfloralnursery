@@ -226,6 +226,144 @@ h1, h2, h3, h4, .logo {
     order: 1; /* Text on left */
 }
 
+/* --- TRUST SECTION (Why Us) --- */
+.trust-section {
+    padding: 4rem 5%;
+    background-color: var(--white);
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+.trust-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    text-align: center;
+}
+
+.trust-number {
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--dark-green);
+    font-family: 'Fredoka', sans-serif;
+    margin-bottom: 0.5rem;
+}
+
+.trust-item h4 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+}
+
+.trust-item p {
+    color: var(--text-light);
+    font-size: 0.95rem;
+}
+
+/* --- PROCESS SECTION --- */
+.process-section {
+    padding: 8rem 5%;
+    background-color: var(--sand);
+}
+
+.process-steps {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    max-width: 1000px;
+    margin: 4rem auto 0;
+}
+
+.step-card {
+    flex: 1;
+    text-align: center;
+    padding: 0 1rem;
+}
+
+.step-number {
+    font-size: 4rem;
+    color: rgba(46, 125, 50, 0.1); /* Very subtle green */
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: -20px;
+    position: relative;
+    z-index: 1;
+}
+
+.step-card h3 {
+    position: relative;
+    z-index: 2;
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+    color: var(--dark-green);
+}
+
+.step-line {
+    width: 50px;
+    height: 2px;
+    background-color: rgba(0,0,0,0.1);
+    margin-top: 50px;
+}
+
+/* --- TESTIMONIALS SECTION --- */
+.testimonials-section {
+    padding: 8rem 5%;
+    background-color: #fff;
+}
+
+.testimonial-slider {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.testimonial-card {
+    background-color: var(--sand);
+    padding: 3rem;
+    border-radius: 20px;
+    flex: 1;
+    min-width: 300px;
+    max-width: 400px;
+    position: relative;
+}
+
+.testimonial-card::before {
+    content: '“';
+    font-size: 5rem;
+    color: var(--primary-green);
+    position: absolute;
+    top: 10px;
+    left: 20px;
+    opacity: 0.2;
+    font-family: serif;
+}
+
+.quote {
+    font-size: 1.1rem;
+    font-style: italic;
+    margin-bottom: 2rem;
+    color: var(--text-main);
+}
+
+.client-info strong {
+    display: block;
+    color: var(--dark-green);
+}
+
+.client-info span {
+    font-size: 0.9rem;
+    color: var(--text-light);
+}
+
+/* Mobile Tweaks for New Sections */
+@media screen and (max-width: 768px) {
+    .trust-grid { grid-template-columns: 1fr; gap: 3rem; }
+    .process-steps { flex-direction: column; align-items: center; gap: 3rem; }
+    .step-line { display: none; } /* Hide lines on mobile */
+    .testimonial-slider { flex-direction: column; align-items: center; }
+}
+
 /* --- PRODUCT/SERVICE CARDS --- */
 .grid-section {
     padding: 6rem 5%;
