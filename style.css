@@ -374,7 +374,7 @@ a:hover, a:focus, a:active {
     position: fixed;
     top: 0;
     left: 0;
-    border-radius: 0;
+    border-radius: 50%; /* Changed to circle */
     z-index: 10000;
     opacity: 0;
     mix-blend-mode: difference;
