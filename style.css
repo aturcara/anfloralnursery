@@ -97,13 +97,6 @@ a:hover, a:focus, a:active {
     text-transform: uppercase;
     letter-spacing: 1px;
     color: var(--text-main);
-    transition: color 0.3s ease;
-    position: relative;
-    z-index: 10001; /* Lift above cursor to ensure visibility */
-}
-
-.nav-links a:hover {
-    color: var(--white) !important;
 }
 
 .cta-nav {
@@ -391,17 +384,6 @@ a:hover, a:focus, a:active {
 /* Hide all by default */
 .cursor-dot, .cursor-outer-line, .cursor-outline {
     display: none;
-}
-
-/* Only show outline on hover */
-body.hovering .cursor-outline {
-    display: block;
-    width: 60px;
-    height: 60px;
-    background-color: var(--dark-green);
-    border-color: transparent;
-    opacity: 1;
-    mix-blend-mode: normal;
 }
 
 @media (hover: none) and (pointer: coarse) {

@@ -415,17 +415,14 @@ const animateCursor = () => {
     outerLine.y += outerLine.vy;
 
     // 4. Transform & Squash/Stretch Logic
-    const isHovering = document.body.classList.contains('hovering');
-    
     // Dot Transform
-    cursorDot.style.transform = `translate(${dot.x - 4}px, ${dot.y - 4}px) scale(${isHovering ? 0 : 1})`;
+    cursorDot.style.transform = `translate(${dot.x - 4}px, ${dot.y - 4}px)`;
 
     // Outline Visuals
     const speed = Math.hypot(outline.vx, outline.vy);
     
     const stretch = Math.min(speed / 20, 0.5);
-    const outlineScale = isHovering ? 1.5 : 1;
-    cursorOutline.style.transform = `translate(${outline.x - 20}px, ${outline.y - 20}px) scale(${outlineScale + stretch}, ${outlineScale - stretch})`;
+    cursorOutline.style.transform = `translate(${outline.x - 20}px, ${outline.y - 20}px) scale(${1 + stretch}, ${1 - stretch})`;
 
     // Outer Line Visuals (Slower, heavy swing)
     if (cursorOuterLine) {
@@ -439,15 +436,6 @@ const animateCursor = () => {
 };
 
 animateCursor();
-
-// Cursor Hover Effects (Using delegation for robustness)
-document.addEventListener('mouseover', (e) => {
-    if (e.target.closest('.nav-links a')) {
-        document.body.classList.add('hovering');
-    } else {
-        document.body.classList.remove('hovering');
-    }
-});
 
 // --- PARALLAX ---
 const heroImg = document.querySelector('.hero-img');
