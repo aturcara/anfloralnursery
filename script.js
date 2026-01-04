@@ -312,17 +312,23 @@ let rafMomentum = null;
 
 const initInfiniteTestimonials = () => {
     if (!track) return;
-    const cards = Array.from(track.children);
-    if (cards.length === 0) return;
+    const originalCards = Array.from(track.children);
+    if (originalCards.length === 0) return;
 
     const clone = track.innerHTML;
     track.innerHTML = clone + clone + clone;
     
+    // Recalculate base width using a card and the track style
+    const card = track.querySelector('.t-card');
     const style = window.getComputedStyle(track);
     const gap = parseFloat(style.gap) || 0;
-    trackBaseWidth = (cards[0].offsetWidth + gap) * cards.length;
+    trackBaseWidth = (card.offsetWidth + gap) * originalCards.length;
     
-    currentTranslateX = -trackBaseWidth;
+    // Initial: Center the first card of the middle set
+    const cardWidth = card.offsetWidth;
+    const firstCardMiddleSetX = trackBaseWidth;
+    currentTranslateX = (window.innerWidth / 2) - (firstCardMiddleSetX + cardWidth / 2);
+    
     track.style.transition = 'none';
     track.style.transform = `translateX(${currentTranslateX}px)`;
     updateActiveCard();
@@ -333,16 +339,17 @@ const updateTestimonialPos = (newX, useTransition = false) => {
     
     currentTranslateX = newX;
 
-    // Boundary Wrap (Middle set)
-    // If we move too far left (past middle set), jump right
-    if (currentTranslateX <= -trackBaseWidth * 2) {
+    // Boundary Wrap logic based on centered position
+    const centerOffset = window.innerWidth / 2;
+    const minX = centerOffset - (trackBaseWidth * 2);
+    const maxX = centerOffset - trackBaseWidth;
+
+    if (currentTranslateX < minX) {
         currentTranslateX += trackBaseWidth;
-        startTranslateX += trackBaseWidth; // Sync drag start point
-    } 
-    // If we move too far right (before middle set), jump left
-    else if (currentTranslateX >= -trackBaseWidth * 0.5) {
+        if (isDraggingTrack) startTranslateX += trackBaseWidth;
+    } else if (currentTranslateX > maxX) {
         currentTranslateX -= trackBaseWidth;
-        startTranslateX -= trackBaseWidth; // Sync drag start point
+        if (isDraggingTrack) startTranslateX -= trackBaseWidth;
     }
 
     if (useTransition) {
@@ -393,8 +400,10 @@ const startTestimonialAutoplay = () => {
         if (isDraggingTrack) return;
         const card = document.querySelector('.t-card');
         const gap = parseFloat(window.getComputedStyle(track).gap) || 0;
-        const step = -(card.offsetWidth + gap);
-        updateTestimonialPos(currentTranslateX + step, true);
+        const step = (card.offsetWidth + gap);
+        
+        // Move to the next card's centered position
+        updateTestimonialPos(currentTranslateX - step, true);
     }, 5000);
 };
 
@@ -469,12 +478,17 @@ const applyMomentum = () => {
 };
 
 const snapToCard = () => {
+    if (!trackBaseWidth) return;
     const card = document.querySelector('.t-card');
+    const cardWidth = card.offsetWidth;
     const gap = parseFloat(window.getComputedStyle(track).gap) || 0;
-    const step = card.offsetWidth + gap;
+    const step = cardWidth + gap;
     
-    const index = Math.round(currentTranslateX / step);
-    const targetX = index * step;
+    // Find the current index centered in the viewport
+    // Reverse of: currentTranslateX = (viewport / 2) - (index * step + cardWidth / 2)
+    const viewportCenter = window.innerWidth / 2;
+    const index = Math.round(((viewportCenter - currentTranslateX) - (cardWidth / 2)) / step);
+    const targetX = viewportCenter - (index * step + cardWidth / 2);
     
     updateTestimonialPos(targetX, true);
     setTimeout(startTestimonialAutoplay, 2000);
