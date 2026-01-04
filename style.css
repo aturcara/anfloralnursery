@@ -391,9 +391,10 @@ body.hovering .cursor-outline {
     display: block;
     width: 60px;
     height: 60px;
-    background-color: var(--white);
+    background-color: var(--dark-green);
     border-color: transparent;
     opacity: 1;
+    mix-blend-mode: normal;
 }
 
 @media (hover: none) and (pointer: coarse) {
