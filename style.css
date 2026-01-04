@@ -205,7 +205,7 @@ a:hover, a:focus, a:active {
 
 /* --- EDITORIAL SECTIONS (Alternating) --- */
 .editorial-section {
-    padding: 8rem 5%;
+    padding: 5rem 5%;
 }
 
 .editorial-grid {
@@ -278,7 +278,7 @@ a:hover, a:focus, a:active {
 
 /* --- PROCESS SECTION --- */
 .process-section {
-    padding: 8rem 5%;
+    padding: 5rem 5%;
     background-color: var(--sand);
 }
 
@@ -323,7 +323,7 @@ a:hover, a:focus, a:active {
 
 /* --- NURSERY EDITORIAL BENTO GRID --- */
 .nursery-bento-section {
-    padding: 10rem 0;
+    padding: 5rem 0;
     background-color: var(--sand);
 }
 
@@ -485,30 +485,6 @@ a:hover, a:focus, a:active {
     font-weight: 400;
     font-size: 0.9rem;
     color: var(--text-light);
-}
-
-/* --- CUSTOM CURSOR --- */
-.cursor-dot,
-.cursor-outline,
-.cursor-outer-line {
-    pointer-events: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    border-radius: 0; /* Back to Square */
-    z-index: 10000;
-    opacity: 0;
-    mix-blend-mode: difference;
-    transition: opacity 0.3s ease-in-out;
-}
-
-/* Hide all by default */
-.cursor-dot, .cursor-outer-line, .cursor-outline {
-    display: none;
-}
-
-@media (hover: none) and (pointer: coarse) {
-    .cursor-dot, .cursor-outline { display: none; }
 }
 
 /* --- DRAG UTILITIES --- */
