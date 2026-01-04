@@ -541,6 +541,23 @@ a:hover, a:focus, a:active {
     font-size: 1.25rem;
     margin-bottom: 0.5rem;
     color: var(--text-main);
+    display: inline-block;
+    position: relative;
+}
+
+.modern-card h3::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--dark-green);
+    transition: width 0.3s var(--transition-curve);
+}
+
+.modern-card:hover h3::after {
+    width: 100%;
 }
 
 .modern-card p {
