@@ -366,6 +366,48 @@ a:hover, a:focus, a:active {
     color: var(--text-light);
 }
 
+/* --- CUSTOM CURSOR --- */
+.cursor-dot,
+.cursor-outline {
+    pointer-events: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    border-radius: 0; /* Keeping with your square theme */
+    z-index: 10000;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-out;
+}
+
+.cursor-dot {
+    width: 8px;
+    height: 8px;
+    background-color: var(--dark-green);
+}
+
+.cursor-outline {
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--dark-green);
+    /* The physics happen in JS via transform */
+}
+
+/* Hover State */
+body.hovering .cursor-outline {
+    width: 60px;
+    height: 60px;
+    background-color: rgba(26, 71, 42, 0.1);
+    border-color: transparent;
+}
+
+body.hovering .cursor-dot {
+    transform: scale(2);
+}
+
+@media (hover: none) and (pointer: coarse) {
+    .cursor-dot, .cursor-outline { display: none; }
+}
+
 /* --- DRAG UTILITIES --- */
 .testimonial-universe, .kinetic-header {
     user-select: none;

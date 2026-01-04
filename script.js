@@ -372,7 +372,56 @@ document.addEventListener('DOMContentLoaded', () => {
     initHeaderDrag(); // For standalone project pages
 });
 
-// Parallax
+// --- CUSTOM CURSOR PHYSICS ---
+const cursorDot = document.querySelector('.cursor-dot');
+const cursorOutline = document.querySelector('.cursor-outline');
+
+let mouseX = 0;
+let mouseY = 0;
+let dotX = 0;
+let dotY = 0;
+let outlineX = 0;
+let outlineY = 0;
+
+window.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    
+    // Show cursor on first movement
+    cursorDot.style.opacity = '1';
+    cursorOutline.style.opacity = '1';
+});
+
+const animateCursor = () => {
+    // Physics: Linear Interpolation (Lerp)
+    // Formula: current = current + (target - current) * factor
+    
+    // Dot follows fast (almost instant)
+    dotX += (mouseX - dotX) * 0.3;
+    dotY += (mouseY - dotY) * 0.3;
+    
+    // Outline follows with heavy lag (physics feel)
+    outlineX += (mouseX - outlineX) * 0.15;
+    outlineY += (mouseY - outlineY) * 0.15;
+    
+    cursorDot.style.transform = `translate(${dotX - 4}px, ${dotY - 4}px)`;
+    cursorOutline.style.transform = `translate(${outlineX - 20}px, ${outlineY - 20}px)`;
+    
+    requestAnimationFrame(animateCursor);
+};
+
+animateCursor();
+
+// Cursor Hover Effects (Using delegation for robustness)
+document.addEventListener('mouseover', (e) => {
+    if (e.target.closest('a, button, .modern-card, .project-card, .leaf-handle, .close-btn')) {
+        document.body.classList.add('hovering');
+    } else {
+        document.body.classList.remove('hovering');
+    }
+});
+
+// --- PARALLAX ---
 const heroImg = document.querySelector('.hero-img');
 window.addEventListener('scroll', () => {
     if (heroImg) {
