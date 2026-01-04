@@ -325,19 +325,13 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // --- PARALLAX ---
-const heroImg = document.querySelector('.hero-img');
-const parallaxEl = document.querySelector('.parallax-element');
-
 window.addEventListener('scroll', () => {
-    let scrollPosition = window.scrollY;
+    const scroll = window.scrollY;
+    const heroContainer = document.querySelector('.hero-image-container');
     
-    if (parallaxEl) {
-        // Move the whole element container (the green box)
-        parallaxEl.style.transform = `translateY(${scrollPosition * 0.1}px)`;
-    }
-    
-    if (heroImg) {
-        // Counter-movement for internal image
-        heroImg.style.transform = `translateY(${-scrollPosition * 0.05}px) scale(1.1)`;
+    if (heroContainer) {
+        // Apply the "awesome animation" (lagging scroll) to the whole box
+        // Using a 0.1 multiplier for a smooth classy lag
+        heroContainer.style.setProperty('--hero-scroll', (scroll * 0.1) + 'px');
     }
 });
