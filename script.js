@@ -68,55 +68,45 @@ counters.forEach(counter => {
     counterObserver.observe(counter);
 });
 
-// --- TESTIMONIALS V2: DRAG DIAL & TRACK ---
+// --- TESTIMONIALS V2: GROWTH SLIDER & TRACK ---
 const track = document.getElementById('testimonialTrack');
-const dial = document.getElementById('dialWrapper');
-let isDown = false;
+const handle = document.getElementById('leafHandle');
+const growthBar = document.getElementById('growthBar');
+const sliderBg = document.querySelector('.growth-track-bg');
+
+let isDragging = false;
 let startX;
 let scrollLeft;
-let rotation = 0;
 
-// Dial Drag Logic
-dial.addEventListener('mousedown', (e) => {
-    isDown = true;
-    startX = e.pageX - dial.offsetLeft;
-});
-
-window.addEventListener('mouseup', () => {
-    isDown = false;
-});
-
-window.addEventListener('mousemove', (e) => {
-    if (!isDown) return;
-    e.preventDefault();
-    const x = e.pageX - dial.offsetLeft;
-    const walk = (x - startX) * 2; // Speed multiplier
+const updateSlider = (e) => {
+    if (!isDragging) return;
     
-    rotation += walk * 0.5;
-    dial.style.transform = `rotate(${rotation}deg)`;
+    const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+    const rect = sliderBg.getBoundingClientRect();
+    let x = clientX - rect.left;
     
-    // Move track based on rotation
+    // Boundary checks
+    if (x < 0) x = 0;
+    if (x > rect.width) x = rect.width;
+    
+    const percent = x / rect.width;
+    
+    // Update Slider UI
+    handle.style.left = `${percent * 100}%`;
+    growthBar.style.width = `${percent * 100}%`;
+    
+    // Update Track Position
     const trackMax = track.scrollWidth - window.innerWidth;
-    const scrollPos = (rotation % 360) / 360 * trackMax;
-    track.style.transform = `translateX(${-Math.abs(scrollPos)}px)`;
-});
+    track.style.transform = `translateX(${-percent * trackMax}px)`;
+};
 
-// Touch support
-dial.addEventListener('touchstart', (e) => {
-    isDown = true;
-    startX = e.touches[0].pageX - dial.offsetLeft;
-});
-window.addEventListener('touchend', () => isDown = false);
-window.addEventListener('touchmove', (e) => {
-    if (!isDown) return;
-    const x = e.touches[0].pageX - dial.offsetLeft;
-    const walk = (x - startX) * 2;
-    rotation += walk * 0.5;
-    dial.style.transform = `rotate(${rotation}deg)`;
-    const trackMax = track.scrollWidth - window.innerWidth;
-    const scrollPos = (rotation % 360) / 360 * trackMax;
-    track.style.transform = `translateX(${-Math.abs(scrollPos)}px)`;
-});
+handle.addEventListener('mousedown', () => isDragging = true);
+window.addEventListener('mouseup', () => isDragging = false);
+window.addEventListener('mousemove', updateSlider);
+
+handle.addEventListener('touchstart', () => isDragging = true);
+window.addEventListener('touchend', () => isDragging = false);
+window.addEventListener('touchmove', updateSlider);
 
 // Parallax Effect for Hero Image (Optional Polish)
 const heroImg = document.querySelector('.hero-img');
