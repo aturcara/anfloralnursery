@@ -3,233 +3,153 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anfloral Nursery | Seni Bina Landskap & Nurseri</title>
+    <title>Anfloral Nursery | Modern Landscape & Greenery</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌿</text></svg>">
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;600&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
-    <!-- FontAwesome for Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;600&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
 
-    <!-- Navigation -->
+    <!-- Navbar -->
     <nav class="navbar">
-        <div class="logo">🌿 Anfloral</div>
+        <div class="logo">Anfloral.</div>
         <ul class="nav-links">
-            <li><a href="#home">Home</a></li>
             <li><a href="#services">Servis</a></li>
-            <li><a href="#nursery">Nurseri</a></li>
-            <li><a href="#gallery">Galeri</a></li>
-            <li><a href="#contact" class="cta-nav">Hubungi Kami</a></li>
+            <li><a href="#shop">Nurseri</a></li>
+            <li><a href="#projects">Projek</a></li>
         </ul>
-        <div class="burger">
-            <div class="line1"></div>
-            <div class="line2"></div>
-            <div class="line3"></div>
-        </div>
+        <a href="https://wa.me/60134085923" class="cta-nav">Hubungi Kami</a>
     </nav>
 
     <!-- Hero Section -->
-    <section id="home" class="hero">
-        <div class="hero-content">
-            <h1>Bawa Alam Semula Jadi <br><span class="highlight">Ke Rumah Anda</span></h1>
-            <p>Pakar Landskap, Penjagaan Taman & Bekalan Nurseri di Utara Semenanjung.</p>
-            <div class="hero-buttons">
-                <a href="https://wa.me/60134085923" target="_blank" class="btn btn-primary"><i class="fab fa-whatsapp"></i> WhatsApp Kami</a>
-                <a href="#services" class="btn btn-secondary">Lihat Servis</a>
-            </div>
+    <header class="hero">
+        <h1 class="reveal-up">Seni Bina Landskap <br> & Nurseri Premium</h1>
+        <p class="reveal-up delay-100">Menghidupkan ruang anda dengan sentuhan alam semula jadi yang eksklusif.</p>
+        
+        <div class="hero-image-container reveal-scale delay-200">
+            <!-- Hero Image: A beautiful wide garden shot -->
+            <img src="https://placehold.co/1200x600/1a472a/FFF?text=Anfloral+Landscape" alt="Modern Landscape" class="hero-img">
         </div>
-        <div class="hero-decoration">
-            <!-- CSS Shapes/Emojis representing nature -->
-            <div class="leaf leaf-1">🍃</div>
-            <div class="leaf leaf-2">🌿</div>
-            <div class="leaf leaf-3">🌱</div>
-            <div class="flower flower-1">🌸</div>
-        </div>
-    </section>
+    </header>
 
-    <!-- About Us Section -->
-    <section id="about" class="about">
-        <div class="container">
-            <h2>Tentang Anfloral</h2>
-            <p>Kami berdedikasi untuk mencantikkan ruang anda dengan sentuhan hijau. Dari Alor Setar ke Ipoh, kami membawakan perkhidmatan landskap profesional dan tanaman berkualiti terus ke pintu anda.</p>
+    <!-- Marquee Banner -->
+    <div class="marquee">
+        <div class="marquee-content">
+            <span>Potong Pokok</span> • <span>Softscape</span> • <span>Hardscape</span> • <span>Hiasan Dalaman</span> • <span>Rumput Karpet</span> • <span>Anfloral Nursery</span> • <span>Potong Pokok</span> • <span>Softscape</span> • <span>Hardscape</span> • <span>Hiasan Dalaman</span>
         </div>
-    </section>
+    </div>
 
-    <!-- Services Section -->
-    <section id="services" class="services">
-        <div class="container">
-            <h2>Servis Kami</h2>
-            <p class="section-subtitle">Apa yang boleh kami bantu anda?</p>
-            <div class="service-grid">
-                <div class="service-card" onclick="whatsAppOrder('Servis Potong Pokok')">
-                    <img src="https://placehold.co/600x400/27ae60/FFF?text=Potong+Pokok" alt="Potong Pokok" class="card-img">
-                    <h3>Potong Pokok</h3>
-                    <p>Perkhidmatan pemotongan dan pemangkasan pokok profesional & selamat.</p>
-                </div>
-                <div class="service-card" onclick="whatsAppOrder('Servis Landskap (Softscape/Hardscape)')">
-                    <img src="https://placehold.co/600x400/27ae60/FFF?text=Landskap" alt="Landskap" class="card-img">
-                    <h3>Landskap</h3>
-                    <p>Softscape & Hardscape untuk mengubah laman anda menjadi syurga.</p>
-                </div>
-                <div class="service-card" onclick="whatsAppOrder('Servis Penyelenggaraan Taman')">
-                    <img src="https://placehold.co/600x400/27ae60/FFF?text=Maintenance" alt="Garden Maintenance" class="card-img">
-                    <h3>Garden Maintenance</h3>
-                    <p>Kami jaga taman anda supaya sentiasa kemas dan subur.</p>
-                </div>
-                <div class="service-card" onclick="whatsAppOrder('Servis Hiasan Dinding')">
-                    <img src="https://placehold.co/600x400/27ae60/FFF?text=Hiasan+Dinding" alt="Hiasan Dinding" class="card-img">
-                    <h3>Hiasan Dinding</h3>
-                    <p>Wall Moss, Wall Plants, dan dekorasi vertikal yang unik.</p>
-                </div>
-                <div class="service-card" onclick="whatsAppOrder('Servis Pemasangan Rumput')">
-                    <img src="https://placehold.co/600x400/27ae60/FFF?text=Rumput" alt="Rumput" class="card-img">
-                    <h3>Rumput</h3>
-                    <p>Pemasangan Rumput Hidup (Live Grass) & Rumput Tiruan (Artificial).</p>
-                </div>
-                <div class="service-card" onclick="whatsAppOrder('Servis Sistem Saliran')">
-                    <img src="https://placehold.co/600x400/27ae60/FFF?text=Drainage" alt="Piping Drainage" class="card-img">
-                    <h3>Piping Drainage</h3>
-                    <p>Penyelesaian sistem saliran air untuk mengelakkan banjir air bertakung.</p>
-                </div>
-                 <div class="service-card" onclick="whatsAppOrder('Servis Interior Design')">
-                    <img src="https://placehold.co/600x400/27ae60/FFF?text=Interior" alt="Interior Design" class="card-img">
-                    <h3>Interior Design</h3>
-                    <p>Sentuhan hijau untuk ruang dalaman rumah atau pejabat anda.</p>
-                </div>
+    <!-- Editorial Section 1: Landscaping (Image Right) -->
+    <section id="services" class="editorial-section">
+        <div class="editorial-grid swap-order">
+            <div class="editorial-text reveal-left">
+                <h2>Transformasi Laman Impian</h2>
+                <p>Daripada 'Softscape' yang lembut kepada 'Hardscape' yang berstruktur, kami menggabungkan elemen seni dan alam untuk mencipta landskap yang bukan sahaja cantik, tetapi menenangkan jiwa.</p>
+                <a href="javascript:void(0)" onclick="whatsAppOrder('Consultation Landskap')" class="link-arrow">Minta Konsultasi <i class="fas fa-arrow-right"></i></a>
             </div>
-            <div class="center-btn">
-                <a href="https://wa.me/60134085923" class="btn btn-primary">Dapatkan Sebut Harga Percuma</a>
+            <div class="editorial-img-wrapper reveal-right">
+                <img src="https://placehold.co/600x500/27ae60/FFF?text=Landscape+Design" alt="Landscape" class="editorial-img">
             </div>
         </div>
     </section>
 
-    <!-- Nursery / Shop Section -->
-    <section id="nursery" class="nursery">
-        <div class="container">
-            <h2>Nurseri Online</h2>
-            <p class="section-subtitle">Pilih tanaman kegemaran anda & order melalui WhatsApp!</p>
-            
-            <!-- Plants -->
-            <h3 class="category-title">Tanaman Hiasan</h3>
-            <div class="product-grid">
-                <!-- Product Items -->
-                <div class="product-card">
-                    <img src="https://placehold.co/400x400/e8f5e9/2e7d32?text=Aglaonema" alt="Aglaonema" class="card-img">
-                    <h4>Aglaonema</h4>
-                    <button onclick="whatsAppOrder('Tanaman Aglaonema')">Beli Sekarang</button>
-                </div>
-                <div class="product-card">
-                    <img src="https://placehold.co/400x400/e8f5e9/2e7d32?text=Begonia" alt="Begonia" class="card-img">
-                    <h4>Begonia</h4>
-                    <button onclick="whatsAppOrder('Tanaman Begonia')">Beli Sekarang</button>
-                </div>
-                <div class="product-card">
-                    <img src="https://placehold.co/400x400/e8f5e9/2e7d32?text=Money+Plant" alt="Pothos" class="card-img">
-                    <h4>Pothos (Money Plant)</h4>
-                    <button onclick="whatsAppOrder('Tanaman Pothos')">Beli Sekarang</button>
-                </div>
-                <div class="product-card">
-                    <img src="https://placehold.co/400x400/e8f5e9/2e7d32?text=Philodendron" alt="Philodendron" class="card-img">
-                    <h4>Philodendron</h4>
-                    <button onclick="whatsAppOrder('Tanaman Philodendron')">Beli Sekarang</button>
-                </div>
-                <div class="product-card">
-                    <img src="https://placehold.co/400x400/e8f5e9/2e7d32?text=Bromeliad" alt="Bromeliad" class="card-img">
-                    <h4>Bromeliad</h4>
-                    <button onclick="whatsAppOrder('Tanaman Bromeliad')">Beli Sekarang</button>
-                </div>
-                <div class="product-card">
-                    <img src="https://placehold.co/400x400/e8f5e9/2e7d32?text=Juniperus" alt="Juniperus" class="card-img">
-                    <h4>Juniperus Taiwan</h4>
-                    <button onclick="whatsAppOrder('Tanaman Juniperus Taiwan')">Beli Sekarang</button>
-                </div>
-                <div class="product-card">
-                    <img src="https://placehold.co/400x400/e8f5e9/2e7d32?text=Buxus" alt="Buxus" class="card-img">
-                    <h4>Buxus Harlandi</h4>
-                    <button onclick="whatsAppOrder('Tanaman Buxus Harlandi')">Beli Sekarang</button>
-                </div>
-                <div class="product-card">
-                    <img src="https://placehold.co/400x400/e8f5e9/2e7d32?text=Palm+Tree" alt="Palm Tree" class="card-img">
-                    <h4>Palm Tree</h4>
-                    <button onclick="whatsAppOrder('Tanaman Palm Tree')">Beli Sekarang</button>
-                </div>
+    <!-- Editorial Section 2: Tree Cutting (Image Left) -->
+    <section class="editorial-section">
+        <div class="editorial-grid">
+            <div class="editorial-img-wrapper reveal-left">
+                <img src="https://placehold.co/600x500/2c3e50/FFF?text=Tree+Cutting" alt="Tree Cutting" class="editorial-img">
             </div>
-
-            <!-- Supplies -->
-            <h3 class="category-title mt-4">Bekalan Taman</h3>
-            <div class="product-grid">
-                <div class="product-card">
-                    <img src="https://placehold.co/400x400/795548/FFF?text=Topsoil" alt="Tanah Merah" class="card-img">
-                    <h4>Tanah Merah Topsoil</h4>
-                    <button onclick="whatsAppOrder('Tanah Merah Topsoil')">Order Lori</button>
-                </div>
-                <div class="product-card">
-                    <img src="https://placehold.co/400x400/3e2723/FFF?text=Tanah+Campur" alt="Tanah Campur" class="card-img">
-                    <h4>Tanah Campur</h4>
-                    <button onclick="whatsAppOrder('Tanah Campur')">Order Sekarang</button>
-                </div>
+            <div class="editorial-text reveal-right">
+                <h2>Servis Potong Pokok Profesional</h2>
+                <p>Keselamatan adalah keutamaan kami. Pasukan kami terlatih untuk menebang dan memangkas pokok besar dengan peralatan yang lengkap dan selamat.</p>
+                <a href="javascript:void(0)" onclick="whatsAppOrder('Servis Potong Pokok')" class="link-arrow">Dapatkan Sebut Harga <i class="fas fa-arrow-right"></i></a>
             </div>
         </div>
     </section>
 
-    <!-- Gallery Placeholder -->
-    <section id="gallery" class="gallery">
-        <div class="container">
-            <h2>Galeri Projek</h2>
-            <div class="gallery-grid">
-                <div class="gallery-item">Projek Laman A</div>
-                <div class="gallery-item">Projek Laman B</div>
-                <div class="gallery-item">Hiasan Dalaman</div>
-                <div class="gallery-item">Potong Pokok</div>
+    <!-- Services Grid (Secondary Services) -->
+    <section class="grid-section">
+        <div class="section-header reveal-up">
+            <h2>Servis Lain</h2>
+            <p>Penyelesaian lengkap untuk kediaman anda.</p>
+        </div>
+        <div class="card-grid">
+            <div class="modern-card reveal-up delay-100" onclick="whatsAppOrder('Garden Maintenance')">
+                <div class="card-image-wrapper">
+                    <img src="https://placehold.co/400x400/e8f5e9/1a472a?text=Maintenance" alt="Maintenance">
+                </div>
+                <h3>Penyelenggaraan Taman</h3>
+                <p>Jadual berkala untuk taman sentiasa kemas.</p>
+            </div>
+            <div class="modern-card reveal-up delay-200" onclick="whatsAppOrder('Hiasan Dinding')">
+                <div class="card-image-wrapper">
+                    <img src="https://placehold.co/400x400/e8f5e9/1a472a?text=Wall+Decor" alt="Wall Decor">
+                </div>
+                <h3>Hiasan Dinding (Moss/Plants)</h3>
+                <p>Seni vertikal untuk ruang pejabat atau rumah.</p>
+            </div>
+            <div class="modern-card reveal-up delay-300" onclick="whatsAppOrder('Sistem Saliran')">
+                <div class="card-image-wrapper">
+                    <img src="https://placehold.co/400x400/e8f5e9/1a472a?text=Drainage" alt="Drainage">
+                </div>
+                <h3>Sistem Saliran</h3>
+                <p>Elak banjir dengan piping drainage yang betul.</p>
             </div>
         </div>
     </section>
 
-    <!-- Testimonials -->
-    <section id="testimonials" class="testimonials">
-        <div class="container">
-            <h2>Kata Pelanggan Kami</h2>
-            <div class="testimonial-grid">
-                <div class="testimonial-card">
-                    <p>"Servis potong pokok yang sangat pantas dan kemas. Harga pun berpatutan!"</p>
-                    <h4>- Ahmad, Sungai Petani</h4>
-                    <div class="stars">⭐⭐⭐⭐⭐</div>
+    <!-- Nursery Grid (Shop) -->
+    <section id="shop" class="grid-section" style="background-color: var(--sand);">
+        <div class="section-header reveal-up">
+            <h2>Koleksi Nurseri</h2>
+            <p>Tanaman terpilih untuk penyeri ruang anda.</p>
+        </div>
+        <div class="card-grid">
+            <!-- Plant 1 -->
+            <div class="modern-card reveal-up" onclick="whatsAppOrder('Tanaman Aglaonema')">
+                <div class="card-image-wrapper">
+                    <img src="https://placehold.co/400x400/1a472a/FFF?text=Aglaonema" alt="Aglaonema">
                 </div>
-                <div class="testimonial-card">
-                    <p>"Saya suka hiasan dinding lumut di pejabat saya. Nampak sangat eksklusif."</p>
-                    <h4>- Sarah, Alor Setar</h4>
-                    <div class="stars">⭐⭐⭐⭐⭐</div>
+                <h3>Aglaonema</h3>
+                <p class="link-arrow">RM XX.00</p>
+            </div>
+            <!-- Plant 2 -->
+            <div class="modern-card reveal-up delay-100" onclick="whatsAppOrder('Tanaman Begonia')">
+                <div class="card-image-wrapper">
+                    <img src="https://placehold.co/400x400/1a472a/FFF?text=Begonia" alt="Begonia">
                 </div>
-                <div class="testimonial-card">
-                    <p>"Pokok Aglaonema yang saya beli sampai dalam keadaan segar. Recommended!"</p>
-                    <h4>- Jason, Penang</h4>
-                    <div class="stars">⭐⭐⭐⭐⭐</div>
+                <h3>Begonia</h3>
+                <p class="link-arrow">RM XX.00</p>
+            </div>
+            <!-- Plant 3 -->
+            <div class="modern-card reveal-up delay-200" onclick="whatsAppOrder('Tanaman Pothos')">
+                <div class="card-image-wrapper">
+                    <img src="https://placehold.co/400x400/1a472a/FFF?text=Money+Plant" alt="Pothos">
                 </div>
+                <h3>Pothos (Money Plant)</h3>
+                <p class="link-arrow">RM XX.00</p>
+            </div>
+             <!-- Plant 4 -->
+             <div class="modern-card reveal-up delay-300" onclick="whatsAppOrder('Tanaman Philodendron')">
+                <div class="card-image-wrapper">
+                    <img src="https://placehold.co/400x400/1a472a/FFF?text=Philodendron" alt="Philodendron">
+                </div>
+                <h3>Philodendron</h3>
+                <p class="link-arrow">RM XX.00</p>
             </div>
         </div>
     </section>
 
-    <!-- Footer / Contact -->
-    <footer id="contact">
-        <div class="container footer-content">
-            <div class="footer-section">
-                <h3>Anfloral Nursery</h3>
-                <p>Kami sedia berkhidmat untuk warga Alor Setar, Gurun, Bedong, Baling, Kuala Ketil, Sungai Petani, Kulim, Padang Serai, Kepala Batas, Bukit Mertajam, Ipoh dan sekitarnya.</p>
-            </div>
-            <div class="footer-section">
-                <h3>Hubungi Kami</h3>
-                <p><i class="fab fa-whatsapp"></i> <a href="https://wa.me/60134085923">+601X-XXX XXXX</a></p>
-                <div class="social-links">
-                    <a href="#"><i class="fab fa-facebook"></i></a>
-                    <a href="#"><i class="fab fa-instagram"></i></a>
-                    <a href="#"><i class="fab fa-tiktok"></i></a>
-                </div>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            &copy; 2026 Anfloral Nursery. Website by Gemini.
-        </div>
+    <!-- Footer -->
+    <footer>
+        <span class="footer-logo">Anfloral.</span>
+        <nav class="footer-nav">
+            <a href="#services">Servis</a>
+            <a href="#shop">Nurseri</a>
+            <a href="https://wa.me/60134085923">Hubungi</a>
+        </nav>
+        <p>&copy; 2026 Anfloral Nursery. All rights reserved.</p>
     </footer>
 
     <script src="script.js"></script>
