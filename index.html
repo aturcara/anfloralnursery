@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anfloral Nursery | Seni Bina Landskap & Nurseri</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;600&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo">🌿 Anfloral</div>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#services">Servis</a></li>
+            <li><a href="#nursery">Nurseri</a></li>
+            <li><a href="#gallery">Galeri</a></li>
+            <li><a href="#contact" class="cta-nav">Hubungi Kami</a></li>
+        </ul>
+        <div class="burger">
+            <div class="line1"></div>
+            <div class="line2"></div>
+            <div class="line3"></div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>Bawa Alam Semula Jadi <br><span class="highlight">Ke Rumah Anda</span></h1>
+            <p>Pakar Landskap, Penjagaan Taman & Bekalan Nurseri di Utara Semenanjung.</p>
+            <div class="hero-buttons">
+                <a href="https://anfloral.wassap.my/" target="_blank" class="btn btn-primary"><i class="fab fa-whatsapp"></i> WhatsApp Kami</a>
+                <a href="#services" class="btn btn-secondary">Lihat Servis</a>
+            </div>
+        </div>
+        <div class="hero-decoration">
+            <!-- CSS Shapes/Emojis representing nature -->
+            <div class="leaf leaf-1">🍃</div>
+            <div class="leaf leaf-2">🌿</div>
+            <div class="leaf leaf-3">🌱</div>
+            <div class="flower flower-1">🌸</div>
+        </div>
+    </section>
+
+    <!-- About Us Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <h2>Tentang Anfloral</h2>
+            <p>Kami berdedikasi untuk mencantikkan ruang anda dengan sentuhan hijau. Dari Alor Setar ke Ipoh, kami membawakan perkhidmatan landskap profesional dan tanaman berkualiti terus ke pintu anda.</p>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="services">
+        <div class="container">
+            <h2>Servis Kami</h2>
+            <p class="section-subtitle">Apa yang boleh kami bantu anda?</p>
+            <div class="service-grid">
+                <div class="service-card" onclick="whatsAppOrder('Servis Potong Pokok')">
+                    <div class="icon">🪓</div>
+                    <h3>Potong Pokok</h3>
+                    <p>Perkhidmatan pemotongan dan pemangkasan pokok profesional & selamat.</p>
+                </div>
+                <div class="service-card" onclick="whatsAppOrder('Servis Landskap (Softscape/Hardscape)')">
+                    <div class="icon">🏡</div>
+                    <h3>Landskap</h3>
+                    <p>Softscape & Hardscape untuk mengubah laman anda menjadi syurga.</p>
+                </div>
+                <div class="service-card" onclick="whatsAppOrder('Servis Penyelenggaraan Taman')">
+                    <div class="icon">👩‍🌾</div>
+                    <h3>Garden Maintenance</h3>
+                    <p>Kami jaga taman anda supaya sentiasa kemas dan subur.</p>
+                </div>
+                <div class="service-card" onclick="whatsAppOrder('Servis Hiasan Dinding')">
+                    <div class="icon">🧱</div>
+                    <h3>Hiasan Dinding</h3>
+                    <p>Wall Moss, Wall Plants, dan dekorasi vertikal yang unik.</p>
+                </div>
+                <div class="service-card" onclick="whatsAppOrder('Servis Pemasangan Rumput')">
+                    <div class="icon">🌱</div>
+                    <h3>Rumput</h3>
+                    <p>Pemasangan Rumput Hidup (Live Grass) & Rumput Tiruan (Artificial).</p>
+                </div>
+                <div class="service-card" onclick="whatsAppOrder('Servis Sistem Saliran')">
+                    <div class="icon">💧</div>
+                    <h3>Piping Drainage</h3>
+                    <p>Penyelesaian sistem saliran air untuk mengelakkan banjir air bertakung.</p>
+                </div>
+                 <div class="service-card" onclick="whatsAppOrder('Servis Interior Design')">
+                    <div class="icon">🛋️</div>
+                    <h3>Interior Design</h3>
+                    <p>Sentuhan hijau untuk ruang dalaman rumah atau pejabat anda.</p>
+                </div>
+            </div>
+            <div class="center-btn">
+                <a href="https://anfloral.wassap.my/" class="btn btn-primary">Dapatkan Sebut Harga Percuma</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Nursery / Shop Section -->
+    <section id="nursery" class="nursery">
+        <div class="container">
+            <h2>Nurseri Online</h2>
+            <p class="section-subtitle">Pilih tanaman kegemaran anda & order melalui WhatsApp!</p>
+            
+            <!-- Plants -->
+            <h3 class="category-title">Tanaman Hiasan</h3>
+            <div class="product-grid">
+                <!-- Product Items -->
+                <div class="product-card">
+                    <div class="product-emoji">🪴</div>
+                    <h4>Aglaonema</h4>
+                    <button onclick="whatsAppOrder('Tanaman Aglaonema')">Beli Sekarang</button>
+                </div>
+                <div class="product-card">
+                    <div class="product-emoji">🌸</div>
+                    <h4>Begonia</h4>
+                    <button onclick="whatsAppOrder('Tanaman Begonia')">Beli Sekarang</button>
+                </div>
+                <div class="product-card">
+                    <div class="product-emoji">🌿</div>
+                    <h4>Pothos (Money Plant)</h4>
+                    <button onclick="whatsAppOrder('Tanaman Pothos')">Beli Sekarang</button>
+                </div>
+                <div class="product-card">
+                    <div class="product-emoji">☘️</div>
+                    <h4>Philodendron</h4>
+                    <button onclick="whatsAppOrder('Tanaman Philodendron')">Beli Sekarang</button>
+                </div>
+                <div class="product-card">
+                    <div class="product-emoji">🌺</div>
+                    <h4>Bromeliad</h4>
+                    <button onclick="whatsAppOrder('Tanaman Bromeliad')">Beli Sekarang</button>
+                </div>
+                <div class="product-card">
+                    <div class="product-emoji">🌲</div>
+                    <h4>Juniperus Taiwan</h4>
+                    <button onclick="whatsAppOrder('Tanaman Juniperus Taiwan')">Beli Sekarang</button>
+                </div>
+                <div class="product-card">
+                    <div class="product-emoji">🌳</div>
+                    <h4>Buxus Harlandi</h4>
+                    <button onclick="whatsAppOrder('Tanaman Buxus Harlandi')">Beli Sekarang</button>
+                </div>
+                <div class="product-card">
+                    <div class="product-emoji">🌴</div>
+                    <h4>Palm Tree</h4>
+                    <button onclick="whatsAppOrder('Tanaman Palm Tree')">Beli Sekarang</button>
+                </div>
+            </div>
+
+            <!-- Supplies -->
+            <h3 class="category-title mt-4">Bekalan Taman</h3>
+            <div class="product-grid">
+                <div class="product-card">
+                    <div class="product-emoji">🟤</div>
+                    <h4>Tanah Merah Topsoil</h4>
+                    <button onclick="whatsAppOrder('Tanah Merah Topsoil')">Order Lori</button>
+                </div>
+                <div class="product-card">
+                    <div class="product-emoji">⚫</div>
+                    <h4>Tanah Campur</h4>
+                    <button onclick="whatsAppOrder('Tanah Campur')">Order Sekarang</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Placeholder -->
+    <section id="gallery" class="gallery">
+        <div class="container">
+            <h2>Galeri Projek</h2>
+            <div class="gallery-grid">
+                <div class="gallery-item">Projek Laman A</div>
+                <div class="gallery-item">Projek Laman B</div>
+                <div class="gallery-item">Hiasan Dalaman</div>
+                <div class="gallery-item">Potong Pokok</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer / Contact -->
+    <footer id="contact">
+        <div class="container footer-content">
+            <div class="footer-section">
+                <h3>Anfloral Nursery</h3>
+                <p>Kami sedia berkhidmat untuk warga Alor Setar, Gurun, Bedong, Baling, Kuala Ketil, Sungai Petani, Kulim, Padang Serai, Kepala Batas, Bukit Mertajam, Ipoh dan sekitarnya.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Hubungi Kami</h3>
+                <p><i class="fab fa-whatsapp"></i> <a href="https://anfloral.wassap.my/">+601X-XXX XXXX</a></p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-tiktok"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2026 Anfloral Nursery. Website by Gemini.
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
