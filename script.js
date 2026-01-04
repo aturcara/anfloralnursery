@@ -328,47 +328,21 @@ const initInfiniteTestimonials = () => {
     updateActiveCard();
 };
 
-const updateActiveCard = () => {
-    if (!track) return;
-    const cards = Array.from(track.children);
-    if (cards.length === 0) return;
-
-    const cardWidth = cards[0].offsetWidth;
-    const gap = parseFloat(window.getComputedStyle(track).gap) || 0;
-    const step = cardWidth + gap;
-
-    // Center point relative to track
-    const centerX = -currentTranslateX + (window.innerWidth / 2);
-    
-    // Find closest card to center
-    let closestIndex = 0;
-    let minDistance = Infinity;
-
-    cards.forEach((card, index) => {
-        const cardX = (index * step) + (cardWidth / 2);
-        const distance = Math.abs(centerX - cardX);
-        if (distance < minDistance) {
-            minDistance = distance;
-            closestIndex = index;
-        }
-        card.classList.remove('active');
-    });
-
-    if (cards[closestIndex]) {
-        cards[closestIndex].classList.add('active');
-    }
-};
-
 const updateTestimonialPos = (newX, useTransition = false) => {
-    if (!track) return;
+    if (!track || !trackBaseWidth) return;
     
     currentTranslateX = newX;
 
-    // Boundary Wrap
+    // Boundary Wrap (Middle set)
+    // If we move too far left (past middle set), jump right
     if (currentTranslateX <= -trackBaseWidth * 2) {
         currentTranslateX += trackBaseWidth;
-    } else if (currentTranslateX >= -trackBaseWidth * 0.5) {
+        startTranslateX += trackBaseWidth; // Sync drag start point
+    } 
+    // If we move too far right (before middle set), jump left
+    else if (currentTranslateX >= -trackBaseWidth * 0.5) {
         currentTranslateX -= trackBaseWidth;
+        startTranslateX -= trackBaseWidth; // Sync drag start point
     }
 
     if (useTransition) {
@@ -379,6 +353,38 @@ const updateTestimonialPos = (newX, useTransition = false) => {
     
     track.style.transform = `translateX(${currentTranslateX}px)`;
     updateActiveCard();
+};
+
+const updateActiveCard = () => {
+    if (!track) return;
+    const cards = Array.from(track.children);
+    if (cards.length === 0) return;
+
+    const cardWidth = cards[0].offsetWidth;
+    const gap = parseFloat(window.getComputedStyle(track).gap) || 0;
+    const step = cardWidth + gap;
+
+    // The center of the visible area relative to the track's start
+    const viewportCenter = window.innerWidth / 2;
+    const trackCenterOffset = viewportCenter - currentTranslateX;
+    
+    let closestIndex = 0;
+    let minDistance = Infinity;
+
+    cards.forEach((card, index) => {
+        const cardCenter = (index * step) + (cardWidth / 2);
+        const distance = Math.abs(trackCenterOffset - cardCenter);
+        
+        if (distance < minDistance) {
+            minDistance = distance;
+            closestIndex = index;
+        }
+        card.classList.remove('active');
+    });
+
+    if (cards[closestIndex]) {
+        cards[closestIndex].classList.add('active');
+    }
 };
 
 const startTestimonialAutoplay = () => {
