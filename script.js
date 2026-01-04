@@ -1,157 +1,6 @@
-// Mobile Navigation Logic (Preserved if needed for future, simplified in CSS for now)
-const burger = document.querySelector('.burger'); // If I re-add burger
-// Current layout uses simple Navbar, but logic is good to have.
+console.log('Anfloral Script Loaded');
 
-// --- WhatsApp Funnel Logic ---
-function whatsAppOrder(item) {
-    const baseUrl = "https://wa.me/60134085923?text=";
-    const message = `Hi Anfloral, saya berminat dengan ${item}.`;
-    const finalUrl = `${baseUrl}${encodeURIComponent(message)}`;
-    window.open(finalUrl, '_blank');
-}
-
-// --- SCROLL ANIMATION ENGINE ---
-// This observes all elements with 'reveal-*' classes
-const observerOptions = {
-    root: null, // Use the viewport
-    rootMargin: '0px',
-    threshold: 0.15 // Trigger when 15% of the element is visible
-};
-
-const observer = new IntersectionObserver((entries, observer) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            // Add the visible class to trigger CSS transition
-            entry.target.classList.add('is-visible');
-            
-            // Optional: Stop observing once revealed (for performance)
-            observer.unobserve(entry.target);
-        }
-    });
-}, observerOptions);
-
-// Select all elements to animate
-const revealElements = document.querySelectorAll('.reveal-up, .reveal-left, .reveal-right, .reveal-scale');
-
-revealElements.forEach((el) => {
-    observer.observe(el);
-});
-
-// --- NUMBER COUNTER ANIMATION ---
-const counters = document.querySelectorAll('.counter');
-const counterObserver = new IntersectionObserver((entries, observer) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            const counter = entry.target;
-            const target = +counter.getAttribute('data-target');
-            const duration = 2000; // 2 seconds
-            const increment = target / (duration / 16); // 60fps
-
-            let current = 0;
-            const updateCounter = () => {
-                current += increment;
-                if (current < target) {
-                    counter.innerText = Math.ceil(current);
-                    requestAnimationFrame(updateCounter);
-                } else {
-                    counter.innerText = target;
-                }
-            };
-            
-            updateCounter();
-            observer.unobserve(counter);
-        }
-    });
-}, { threshold: 0.5 }); // Start when 50% visible
-
-counters.forEach(counter => {
-    counterObserver.observe(counter);
-});
-
-// --- TESTIMONIALS V2: GROWTH SLIDER & TRACK ---
-const track = document.getElementById('testimonialTrack');
-const handle = document.getElementById('leafHandle');
-const growthBar = document.getElementById('growthBar');
-const sliderBg = document.querySelector('.growth-track-bg');
-const universe = document.querySelector('.testimonial-universe');
-
-let isDragging = false;
-let isDraggingTrack = false;
-let startX;
-let currentPercent = 0;
-
-// Function to update UI from percent (0 to 1)
-const updateUI = (percent) => {
-    if (percent < 0) percent = 0;
-    if (percent > 1) percent = 1;
-    currentPercent = percent;
-
-    // Update Slider UI
-    handle.style.left = `${percent * 100}%`;
-    growthBar.style.width = `${percent * 100}%`;
-    
-    // Update Track Position
-    const trackMax = track.scrollWidth - window.innerWidth + (window.innerWidth * 0.1); // include padding
-    track.style.transform = `translateX(${-percent * trackMax}px)`;
-};
-
-// Slider Drag Logic
-const onSliderMove = (e) => {
-    if (!isDragging) return;
-    const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
-    const rect = sliderBg.getBoundingClientRect();
-    let x = clientX - rect.left;
-    updateUI(x / rect.width);
-};
-
-// Track Drag Logic
-let trackStartX;
-let initialPercent;
-
-const onTrackStart = (e) => {
-    isDraggingTrack = true;
-    const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
-    trackStartX = clientX;
-    initialPercent = currentPercent;
-    track.style.transition = 'none'; // Snappy drag
-};
-
-const onTrackMove = (e) => {
-    if (!isDraggingTrack) return;
-    const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
-    const walk = clientX - trackStartX;
-    const trackMax = track.scrollWidth - window.innerWidth;
-    const percentChange = walk / trackMax;
-    updateUI(initialPercent - percentChange);
-};
-
-const onDragEnd = () => {
-    isDragging = false;
-    isDraggingTrack = false;
-    track.style.transition = 'transform 0.8s cubic-bezier(0.22, 1, 0.36, 1)';
-};
-
-// Event Listeners for Slider
-handle.addEventListener('mousedown', () => isDragging = true);
-handle.addEventListener('touchstart', () => isDragging = true);
-
-// Event Listeners for Track
-universe.addEventListener('mousedown', onTrackStart);
-universe.addEventListener('touchstart', onTrackStart);
-
-// Global Listeners
-window.addEventListener('mousemove', (e) => {
-    onSliderMove(e);
-    onTrackMove(e);
-});
-window.addEventListener('touchmove', (e) => {
-    onSliderMove(e);
-    onTrackMove(e);
-});
-window.addEventListener('mouseup', onDragEnd);
-window.addEventListener('touchend', onDragEnd);
-
-// --- PROJECT DETAIL LOGIC ---
+// --- PROJECT DATA ---
 const projectData = {
     'villa-tropika': {
         title: 'Villa Tropika',
@@ -176,7 +25,17 @@ const projectData = {
     }
 };
 
+// --- CORE FUNCTIONS ---
+
+function whatsAppOrder(item) {
+    const baseUrl = "https://wa.me/60134085923?text=";
+    const message = `Hi Anfloral, saya berminat dengan ${item}.`;
+    const finalUrl = `${baseUrl}${encodeURIComponent(message)}`;
+    window.open(finalUrl, '_blank');
+}
+
 function openProject(id, el) {
+    console.log('Attempting to open project:', id);
     const data = projectData[id];
     if (!data) return;
 
@@ -185,20 +44,31 @@ function openProject(id, el) {
     const detailContent = document.getElementById('detailContent');
     const detailNav = document.querySelector('.detail-nav');
 
-    // Update URL without reload
-    history.pushState({ projectId: id }, '', `${id}.html`);
+    if (!overlay || !ribbonTrack || !detailContent || !detailNav) {
+        console.error('One or more detail elements not found in DOM');
+        return;
+    }
 
-    // 1. Calculate Rect of Clicked Element
+    // Update URL without reload
+    try {
+        history.pushState({ projectId: id }, '', `${id}.html`);
+    } catch (e) { console.warn(e); }
+
+    // 1. Calculate Rect
     const rect = el.getBoundingClientRect();
 
-    // 2. Create Expander Placeholder
+    // 2. Create Expander
     const expander = document.createElement('div');
     expander.className = 'card-expander';
-    expander.style.top = `${rect.top}px`;
-    expander.style.left = `${rect.left}px`;
-    expander.style.width = `${rect.width}px`;
-    expander.style.height = `${rect.height}px`;
-    expander.style.background = data.color;
+    Object.assign(expander.style, {
+        top: `${rect.top}px`,
+        left: `${rect.left}px`,
+        width: `${rect.width}px`,
+        height: `${rect.height}px`,
+        background: data.color,
+        position: 'fixed',
+        zIndex: '10000'
+    });
     document.body.appendChild(expander);
 
     // 3. Prepare Content
@@ -215,9 +85,10 @@ function openProject(id, el) {
     }
     ribbonTrack.innerHTML += ribbonTrack.innerHTML;
 
-    // 4. Execute Expansion Animation
-    expander.offsetHeight; 
-    expander.classList.add('expanding');
+    // 4. Animation
+    requestAnimationFrame(() => {
+        expander.classList.add('expanding');
+    });
 
     setTimeout(() => {
         overlay.classList.add('active');
@@ -237,36 +108,143 @@ function closeProject(isBackAction = false) {
     const detailContent = document.getElementById('detailContent');
     const detailNav = document.querySelector('.detail-nav');
 
-    detailContent.classList.remove('visible');
-    detailNav.classList.remove('visible');
+    if (detailContent) detailContent.classList.remove('visible');
+    if (detailNav) detailNav.classList.remove('visible');
 
     setTimeout(() => {
-        overlay.classList.remove('active');
+        if (overlay) overlay.classList.remove('active');
         document.body.style.overflow = 'auto';
-        
-        // If the user clicked the 'X' button (not the browser back button)
         if (!isBackAction) {
-            history.pushState(null, '', 'index.html');
+            try { history.pushState(null, '', 'index.html'); } catch(e){}
         }
     }, 400);
 }
 
-// Listen for Browser Back Button
 window.addEventListener('popstate', (e) => {
-    // If we're going back to main page (no state)
     if (!e.state || !e.state.projectId) {
         closeProject(true);
     }
 });
 
-// Parallax Effect for Hero Image (Optional Polish)
+// --- OBSERVERS ---
 
-// Parallax Effect for Hero Image (Optional Polish)
+const observerOptions = { threshold: 0.15 };
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+        }
+    });
+}, observerOptions);
+
+document.querySelectorAll('.reveal-up, .reveal-left, .reveal-right, .reveal-scale').forEach(el => observer.observe(el));
+
+const counterObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            const counter = entry.target;
+            const target = +counter.getAttribute('data-target');
+            let current = 0;
+            const increment = target / 120;
+            const update = () => {
+                current += increment;
+                if (current < target) {
+                    counter.innerText = Math.ceil(current);
+                    requestAnimationFrame(update);
+                } else {
+                    counter.innerText = target;
+                }
+            };
+            update();
+            counterObserver.unobserve(counter);
+        }
+    });
+}, { threshold: 0.5 });
+
+document.querySelectorAll('.counter').forEach(c => counterObserver.observe(c));
+
+// --- TESTIMONIALS SLIDER ---
+
+const track = document.getElementById('testimonialTrack');
+const handle = document.getElementById('leafHandle');
+const growthBar = document.getElementById('growthBar');
+const sliderBg = document.querySelector('.growth-track-bg');
+const universe = document.querySelector('.testimonial-universe');
+
+let isDragging = false;
+let isDraggingTrack = false;
+let currentPercent = 0;
+
+const updateUI = (percent) => {
+    percent = Math.max(0, Math.min(1, percent));
+    currentPercent = percent;
+    if (handle) handle.style.left = `${percent * 100}%`;
+    if (growthBar) growthBar.style.width = `${percent * 100}%`;
+    if (track) {
+        const trackMax = track.scrollWidth - window.innerWidth + (window.innerWidth * 0.1);
+        track.style.transform = `translateX(${-percent * trackMax}px)`;
+    }
+};
+
+if (handle) {
+    handle.addEventListener('mousedown', () => isDragging = true);
+    handle.addEventListener('touchstart', () => isDragging = true);
+}
+
+let trackStartX, initialPercent;
+if (universe) {
+    universe.addEventListener('mousedown', (e) => {
+        isDraggingTrack = true;
+        trackStartX = e.clientX;
+        initialPercent = currentPercent;
+        if (track) track.style.transition = 'none';
+    });
+    universe.addEventListener('touchstart', (e) => {
+        isDraggingTrack = true;
+        trackStartX = e.touches[0].clientX;
+        initialPercent = currentPercent;
+        if (track) track.style.transition = 'none';
+    });
+}
+
+window.addEventListener('mousemove', (e) => {
+    if (isDragging && sliderBg) {
+        const rect = sliderBg.getBoundingClientRect();
+        updateUI((e.clientX - rect.left) / rect.width);
+    }
+    if (isDraggingTrack) {
+        const walk = e.clientX - trackStartX;
+        const trackMax = track.scrollWidth - window.innerWidth;
+        updateUI(initialPercent - (walk / trackMax));
+    }
+});
+
+window.addEventListener('touchmove', (e) => {
+    if (isDragging && sliderBg) {
+        const rect = sliderBg.getBoundingClientRect();
+        updateUI((e.touches[0].clientX - rect.left) / rect.width);
+    }
+    if (isDraggingTrack) {
+        const walk = e.touches[0].clientX - trackStartX;
+        const trackMax = track.scrollWidth - window.innerWidth;
+        updateUI(initialPercent - (walk / trackMax));
+    }
+});
+
+window.addEventListener('mouseup', () => {
+    isDragging = isDraggingTrack = false;
+    if (track) track.style.transition = 'transform 0.8s cubic-bezier(0.22, 1, 0.36, 1)';
+});
+window.addEventListener('touchend', () => {
+    isDragging = isDraggingTrack = false;
+    if (track) track.style.transition = 'transform 0.8s cubic-bezier(0.22, 1, 0.36, 1)';
+});
+
+// --- PARALLAX ---
 const heroImg = document.querySelector('.hero-img');
 window.addEventListener('scroll', () => {
     if (heroImg) {
-        let scrollPosition = window.scrollY;
-        // Move image slightly slower than scroll
-        heroImg.style.transform = `translateY(${scrollPosition * 0.1}px)`;
+        heroImg.style.transform = `translateY(${window.scrollY * 0.1}px)`;
     }
 });
