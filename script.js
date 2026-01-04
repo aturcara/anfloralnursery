@@ -391,6 +391,9 @@ window.addEventListener('mousemove', (e) => {
     if (cursorOuterLine) cursorOuterLine.style.opacity = '1';
 });
 
+let outlineAngle = 0;
+let outerLineAngle = 0;
+
 const animateCursor = () => {
     // 1. Dot Logic (Simple Lerp for precision)
     dot.x += (mouse.x - dot.x) * 0.4;
@@ -424,27 +427,30 @@ const animateCursor = () => {
     // Dot Transform
     cursorDot.style.transform = `translate(${dot.x - 4}px, ${dot.y - 4}px) scale(${isHovering ? 0 : 1})`;
 
-    // Outline Visuals (Dynamic Scaling/Skew based on speed)
+    // Outline Visuals
     const speed = Math.hypot(outline.vx, outline.vy);
-    const angle = Math.atan2(outline.vy, outline.vx) * 180 / Math.PI;
-    const stretch = Math.min(speed / 20, 0.5); // Max 50% stretch
+    const targetAngle = speed > 0.5 ? Math.atan2(outline.vy, outline.vx) * 180 / Math.PI : 0;
     
+    // Smoothly transition angle back to 0 when stopped
+    outlineAngle += (targetAngle - outlineAngle) * 0.1;
+    
+    const stretch = Math.min(speed / 20, 0.5);
     const outlineScale = isHovering ? 1.5 : 1;
-    cursorOutline.style.transform = `translate(${outline.x - 20}px, ${outline.y - 20}px) rotate(${angle}deg) scale(${outlineScale + stretch}, ${outlineScale - stretch})`;
+    cursorOutline.style.transform = `translate(${outline.x - 20}px, ${outline.y - 20}px) rotate(${outlineAngle}deg) scale(${outlineScale + stretch}, ${outlineScale - stretch})`;
 
-    // Outer Line Visuals (Slower, heavy swing)
+    // Outer Line Visuals
     if (cursorOuterLine) {
         const outerSpeed = Math.hypot(outerLine.vx, outerLine.vy);
-        const outerAngle = Math.atan2(outerLine.vy, outerLine.vx) * 180 / Math.PI;
-        const outerStretch = Math.min(outerSpeed / 40, 0.3);
+        const outerTargetAngle = outerSpeed > 0.5 ? Math.atan2(outerLine.vy, outerLine.vx) * 180 / Math.PI : 0;
         
-        cursorOuterLine.style.transform = `translate(${outerLine.x - 50}px, ${outerLine.y - 50}px) rotate(${outerAngle}deg) scale(${1 + outerStretch}, ${1 - outerStretch})`;
+        outerLineAngle += (outerTargetAngle - outerLineAngle) * 0.05;
+        
+        const outerStretch = Math.min(outerSpeed / 40, 0.3);
+        cursorOuterLine.style.transform = `translate(${outerLine.x - 50}px, ${outerLine.y - 50}px) rotate(${outerLineAngle}deg) scale(${1 + outerStretch}, ${1 - outerStretch})`;
     }
     
     requestAnimationFrame(animateCursor);
 };
-
-animateCursor();
 
 animateCursor();
 
