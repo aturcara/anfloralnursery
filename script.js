@@ -23,16 +23,13 @@ burger.addEventListener('click', () => {
 // WhatsApp Funnel Logic
 function whatsAppOrder(item) {
     // Base URL provided by user
-    const baseUrl = "https://anfloral.wassap.my/";
+    const baseUrl = "https://wa.me/60134085923?text=";
     
     // Construct the message
     // "Hi Anfloral, saya berminat dengan [Item Name]."
     const message = `Hi Anfloral, saya berminat dengan ${item}.`;
     
     // Encode the message for URL
-    // wassap.my usually handles text appended after the slash or via query params.
-    // Standard pattern: https://<id>.wassap.my/<URL_ENCODED_MESSAGE>
-    
     const encodedMessage = encodeURIComponent(message);
     const finalUrl = `${baseUrl}${encodedMessage}`;
     
