@@ -28,10 +28,72 @@ const projectData = {
     }
 };
 
-// ... (keep previous functions)
+// --- CORE FUNCTIONS ---
+
+function whatsAppOrder(item) {
+    const baseUrl = "https://wa.me/60134085923?text=";
+    const message = `Hi Anfloral, saya berminat dengan ${item}.`;
+    const finalUrl = `${baseUrl}${encodeURIComponent(message)}`;
+    window.open(finalUrl, '_blank');
+}
+
+// Global state for project header dragging
+let isHeaderDragging = false;
+let headerStartX;
+let headerInitialX = 0;
+
+function initHeaderDrag() {
+    const headerContainer = document.querySelector('.kinetic-header');
+    const ribbonTrack = document.getElementById('ribbonTrack');
+    if (!headerContainer || !ribbonTrack) return;
+
+    const startHeaderDrag = (e) => {
+        isHeaderDragging = true;
+        const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+        headerStartX = clientX;
+        
+        // Robust way to get current X translation
+        const style = window.getComputedStyle(ribbonTrack);
+        const matrix = new WebKitCSSMatrix(style.transform);
+        headerInitialX = matrix.m41;
+        
+        ribbonTrack.style.transition = 'none';
+    };
+
+    const moveHeaderDrag = (e) => {
+        if (!isHeaderDragging) return;
+        const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+        const walk = (clientX - headerStartX) * 1.2;
+        let newX = headerInitialX + walk;
+        
+        const maxScroll = ribbonTrack.scrollWidth - window.innerWidth;
+        if (newX > 0) newX = 0;
+        if (newX < -maxScroll) newX = -maxScroll;
+        
+        ribbonTrack.style.transform = `translateX(${newX}px)`;
+    };
+
+    const stopHeaderDrag = () => {
+        if (!isHeaderDragging) return;
+        isHeaderDragging = false;
+        ribbonTrack.style.transition = 'transform 0.6s cubic-bezier(0.22, 1, 0.36, 1)';
+    };
+
+    // Remove existing to avoid duplicates if re-initted
+    headerContainer.removeEventListener('mousedown', startHeaderDrag);
+    headerContainer.addEventListener('mousedown', startHeaderDrag);
+    headerContainer.addEventListener('touchstart', startHeaderDrag, {passive: true});
+    
+    window.removeEventListener('mousemove', moveHeaderDrag);
+    window.addEventListener('mousemove', moveHeaderDrag);
+    window.addEventListener('touchmove', moveHeaderDrag, {passive: false});
+    
+    window.removeEventListener('mouseup', stopHeaderDrag);
+    window.addEventListener('mouseup', stopHeaderDrag);
+    window.addEventListener('touchend', stopHeaderDrag);
+}
 
 function openProject(id, el) {
-    console.log('Attempting to open project:', id);
     const data = projectData[id];
     if (!data) return;
 
@@ -43,7 +105,6 @@ function openProject(id, el) {
 
     if (!overlay || !ribbonTrack || !detailContent || !detailNav) return;
 
-    // Update URL
     try { history.pushState({ projectId: id }, '', `${id}.html`); } catch (e) { }
 
     const rect = el.getBoundingClientRect();
@@ -60,14 +121,12 @@ function openProject(id, el) {
     });
     document.body.appendChild(expander);
 
-    // Prepare Content
     document.getElementById('detailTitle').innerText = data.title;
     document.getElementById('detailDescription').innerText = data.description;
     document.getElementById('detailDuration').innerText = data.duration;
     document.getElementById('detailPlants').innerText = data.plants;
     heroMarquee.innerHTML = `<span>${data.subtitle}</span> • <span>${data.subtitle}</span> • <span>${data.subtitle}</span>`;
 
-    // Inject Images (Manual Carousel - No Infinite loop clone)
     ribbonTrack.innerHTML = '';
     const themes = ['nature', 'garden', 'plants', 'landscape', 'architecture'];
     for (let i = 0; i < 6; i++) {
@@ -77,7 +136,6 @@ function openProject(id, el) {
     }
     ribbonTrack.style.transform = 'translateX(0)';
 
-    // Animation
     requestAnimationFrame(() => expander.classList.add('expanding'));
 
     setTimeout(() => {
@@ -86,57 +144,13 @@ function openProject(id, el) {
         detailContent.classList.add('visible');
         detailNav.classList.add('visible');
         document.body.style.overflow = 'hidden';
+        initHeaderDrag(); // Initialize drag after overlay is visible
     }, 600);
 
     setTimeout(() => {
         expander.style.opacity = '0';
         setTimeout(() => expander.remove(), 500);
     }, 1000);
-
-    // --- INTERNAL HEADER DRAG ---
-    let isHeaderDragging = false;
-    let headerStartX;
-    let headerScrollLeft = 0;
-
-    const headerContainer = document.querySelector('.kinetic-header');
-    
-    headerContainer.onmousedown = (e) => {
-        isHeaderDragging = true;
-        headerStartX = e.pageX - ribbonTrack.offsetLeft;
-    };
-
-    window.addEventListener('mousemove', (e) => {
-        if (!isHeaderDragging) return;
-        const x = e.pageX - headerContainer.offsetLeft;
-        const walk = (x - headerStartX) * 1.5;
-        headerScrollLeft = walk;
-        
-        // Boundaries
-        const maxScroll = ribbonTrack.scrollWidth - window.innerWidth;
-        if (headerScrollLeft > 0) headerScrollLeft = 0;
-        if (headerScrollLeft < -maxScroll) headerScrollLeft = -maxScroll;
-        
-        ribbonTrack.style.transform = `translateX(${headerScrollLeft}px)`;
-    });
-
-    window.addEventListener('mouseup', () => isHeaderDragging = false);
-    
-    // Touch
-    headerContainer.ontouchstart = (e) => {
-        isHeaderDragging = true;
-        headerStartX = e.touches[0].pageX - ribbonTrack.offsetLeft;
-    };
-    window.addEventListener('touchmove', (e) => {
-        if (!isHeaderDragging) return;
-        const x = e.touches[0].pageX - headerContainer.offsetLeft;
-        const walk = (x - headerStartX) * 1.5;
-        headerScrollLeft = walk;
-        const maxScroll = ribbonTrack.scrollWidth - window.innerWidth;
-        if (headerScrollLeft > 0) headerScrollLeft = 0;
-        if (headerScrollLeft < -maxScroll) headerScrollLeft = -maxScroll;
-        ribbonTrack.style.transform = `translateX(${headerScrollLeft}px)`;
-    });
-    window.addEventListener('touchend', () => isHeaderDragging = false);
 }
 
 function closeProject(isBackAction = false) {
@@ -225,23 +239,20 @@ const updateUI = (percent) => {
 
 if (handle) {
     handle.addEventListener('mousedown', () => isDragging = true);
-    handle.addEventListener('touchstart', () => isDragging = true);
+    handle.addEventListener('touchstart', () => isDragging = true, {passive: true});
 }
 
 let trackStartX, initialPercent;
 if (universe) {
-    universe.addEventListener('mousedown', (e) => {
+    const startTrackDrag = (e) => {
         isDraggingTrack = true;
-        trackStartX = e.clientX;
+        const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+        trackStartX = clientX;
         initialPercent = currentPercent;
         if (track) track.style.transition = 'none';
-    });
-    universe.addEventListener('touchstart', (e) => {
-        isDraggingTrack = true;
-        trackStartX = e.touches[0].clientX;
-        initialPercent = currentPercent;
-        if (track) track.style.transition = 'none';
-    });
+    };
+    universe.addEventListener('mousedown', startTrackDrag);
+    universe.addEventListener('touchstart', startTrackDrag, {passive: true});
 }
 
 window.addEventListener('mousemove', (e) => {
@@ -252,7 +263,7 @@ window.addEventListener('mousemove', (e) => {
     if (isDraggingTrack) {
         const walk = e.clientX - trackStartX;
         const trackMax = track.scrollWidth - window.innerWidth;
-        updateUI(initialPercent - (walk / trackMax));
+        updateUI(initialPercent - (walk / (trackMax || 1)));
     }
 });
 
@@ -264,20 +275,23 @@ window.addEventListener('touchmove', (e) => {
     if (isDraggingTrack) {
         const walk = e.touches[0].clientX - trackStartX;
         const trackMax = track.scrollWidth - window.innerWidth;
-        updateUI(initialPercent - (walk / trackMax));
+        updateUI(initialPercent - (walk / (trackMax || 1)));
     }
-});
+}, {passive: false});
 
-window.addEventListener('mouseup', () => {
+const endDrag = () => {
     isDragging = isDraggingTrack = false;
     if (track) track.style.transition = 'transform 0.8s cubic-bezier(0.22, 1, 0.36, 1)';
-});
-window.addEventListener('touchend', () => {
-    isDragging = isDraggingTrack = false;
-    if (track) track.style.transition = 'transform 0.8s cubic-bezier(0.22, 1, 0.36, 1)';
+};
+window.addEventListener('mouseup', endDrag);
+window.addEventListener('touchend', endDrag);
+
+// --- INITIALIZE ON LOAD ---
+document.addEventListener('DOMContentLoaded', () => {
+    initHeaderDrag(); // For standalone project pages
 });
 
-// --- PARALLAX ---
+// Parallax
 const heroImg = document.querySelector('.hero-img');
 window.addEventListener('scroll', () => {
     if (heroImg) {

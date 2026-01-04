@@ -366,6 +366,16 @@ h1, h2, h3, h4, .logo {
     color: var(--text-light);
 }
 
+/* --- DRAG UTILITIES --- */
+.testimonial-universe, .kinetic-header {
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+.testimonial-universe img, .kinetic-header img {
+    pointer-events: none;
+}
+
 /* THE GROWTH SLIDER */
 .growth-slider-container {
     max-width: 600px;
