@@ -368,7 +368,8 @@ a:hover, a:focus, a:active {
 
 /* --- CUSTOM CURSOR --- */
 .cursor-dot,
-.cursor-outline {
+.cursor-outline,
+.cursor-outer-line {
     pointer-events: none;
     position: fixed;
     top: 0;
@@ -376,14 +377,14 @@ a:hover, a:focus, a:active {
     border-radius: 0;
     z-index: 10000;
     opacity: 0;
-    mix-blend-mode: difference; /* Magic inversion logic */
-    transition: opacity 0.3s ease-in-out; /* Removed transform transition to let JS handle physics smoothly */
+    mix-blend-mode: difference;
+    transition: opacity 0.3s ease-in-out;
 }
 
 .cursor-dot {
     width: 8px;
     height: 8px;
-    background-color: var(--white); /* White for difference mode */
+    background-color: var(--white);
 }
 
 .cursor-outline {
@@ -392,16 +393,26 @@ a:hover, a:focus, a:active {
     border: 1px solid var(--white);
 }
 
+.cursor-outer-line {
+    width: 100px;
+    height: 100px;
+    border: 0.5px solid rgba(255, 255, 255, 0.5); /* Thinner and more subtle */
+}
+
 /* Hover State */
 body.hovering .cursor-outline {
     width: 60px;
     height: 60px;
-    background-color: var(--white); /* Solid white in difference = fully inverted area */
+    background-color: var(--white);
     border-color: transparent;
 }
 
 body.hovering .cursor-dot {
-    transform: scale(0); /* Hide dot on hover for cleaner look */
+    transform: scale(0);
+}
+
+body.hovering .cursor-outer-line {
+    opacity: 0 !important; /* Force hide when hovering */
 }
 
 @media (hover: none) and (pointer: coarse) {

@@ -375,6 +375,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // --- CUSTOM CURSOR PHYSICS ---
 const cursorDot = document.querySelector('.cursor-dot');
 const cursorOutline = document.querySelector('.cursor-outline');
+const cursorOuterLine = document.querySelector('.cursor-outer-line');
 
 let mouseX = 0;
 let mouseY = 0;
@@ -382,6 +383,8 @@ let dotX = 0;
 let dotY = 0;
 let outlineX = 0;
 let outlineY = 0;
+let outerLineX = 0;
+let outerLineY = 0;
 
 window.addEventListener('mousemove', (e) => {
     mouseX = e.clientX;
@@ -390,6 +393,7 @@ window.addEventListener('mousemove', (e) => {
     // Show cursor on first movement
     cursorDot.style.opacity = '1';
     cursorOutline.style.opacity = '1';
+    if (cursorOuterLine) cursorOuterLine.style.opacity = '1';
 });
 
 const animateCursor = () => {
@@ -399,6 +403,9 @@ const animateCursor = () => {
     
     outlineX += (mouseX - outlineX) * 0.15;
     outlineY += (mouseY - outlineY) * 0.15;
+
+    outerLineX += (mouseX - outerLineX) * 0.08; // Even slower for heavy feel
+    outerLineY += (mouseY - outerLineY) * 0.08;
     
     const isHovering = document.body.classList.contains('hovering');
     const dotScale = isHovering ? 0 : 1;
@@ -406,6 +413,10 @@ const animateCursor = () => {
 
     cursorDot.style.transform = `translate(${dotX - 4}px, ${dotY - 4}px) scale(${dotScale})`;
     cursorOutline.style.transform = `translate(${outlineX - 20}px, ${outlineY - 20}px) scale(${outlineScale})`;
+    
+    if (cursorOuterLine) {
+        cursorOuterLine.style.transform = `translate(${outerLineX - 50}px, ${outerLineY - 50}px)`;
+    }
     
     requestAnimationFrame(animateCursor);
 };
