@@ -372,14 +372,10 @@ document.addEventListener('DOMContentLoaded', () => {
     initHeaderDrag(); // For standalone project pages
 });
 
-// --- PARALLAX ---
+// Parallax
+const heroImg = document.querySelector('.hero-img');
 window.addEventListener('scroll', () => {
-    const scroll = window.scrollY;
-    const heroContainer = document.querySelector('.hero-image-container');
-    
-    if (heroContainer) {
-        // Apply the "awesome animation" (lagging scroll) to the whole box
-        // Using a 0.1 multiplier for a smooth classy lag
-        heroContainer.style.setProperty('--hero-scroll', (scroll * 0.1) + 'px');
+    if (heroImg) {
+        heroImg.style.transform = `translateY(${window.scrollY * 0.1}px)`;
     }
 });
