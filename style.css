@@ -699,20 +699,22 @@ footer {
     color: var(--white);
 }
 
-/* --- PROJECT DETAIL OVERLAY & TRANSITION --- */
-.transition-curtain {
+/* --- CARD EXPANSION TRANSITION --- */
+.card-expander {
     position: fixed;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: var(--dark-green);
-    z-index: 9999;
-    transition: left 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+    z-index: 10000;
+    border-radius: 20px;
+    pointer-events: none;
+    transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    overflow: hidden;
 }
 
-.transition-curtain.active {
-    left: 100%;
+.card-expander.expanding {
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    border-radius: 0;
 }
 
 .project-detail-overlay {
@@ -730,12 +732,18 @@ footer {
 
 .project-detail-overlay.active {
     display: block;
-    animation: fadeInOverlay 0.5s forwards 0.4s;
+    opacity: 1; /* Fade handled by content */
 }
 
-@keyframes fadeInOverlay {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+.detail-content {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.6s ease 0.4s; /* Wait for expansion */
+}
+
+.detail-content.visible {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .detail-nav {
@@ -747,6 +755,17 @@ footer {
     background: rgba(253, 251, 247, 0.8);
     backdrop-filter: blur(10px);
     z-index: 100;
+    opacity: 0;
+    transition: opacity 0.4s ease 0.6s;
+}
+
+.detail-nav.visible {
+    opacity: 1;
+}
+
+/* --- PROJECT DETAIL OVERLAY & TRANSITION (OLD CURTAIN REMOVED) --- */
+.transition-curtain {
+    display: none; /* Replaced by card expansion */
 }
 
 .close-btn {

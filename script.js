@@ -176,48 +176,72 @@ const projectData = {
     }
 };
 
-function openProject(id) {
+function openProject(id, el) {
     const data = projectData[id];
     if (!data) return;
 
-    const curtain = document.getElementById('curtain');
     const overlay = document.getElementById('projectDetailOverlay');
     const ribbonTrack = document.getElementById('ribbonTrack');
+    const detailContent = document.getElementById('detailContent');
+    const detailNav = document.querySelector('.detail-nav');
 
-    // Reset and Set Content
+    // 1. Calculate Rect of Clicked Element
+    const rect = el.getBoundingClientRect();
+
+    // 2. Create Expander Placeholder
+    const expander = document.createElement('div');
+    expander.className = 'card-expander';
+    expander.style.top = `${rect.top}px`;
+    expander.style.left = `${rect.left}px`;
+    expander.style.width = `${rect.width}px`;
+    expander.style.height = `${rect.height}px`;
+    expander.style.background = data.color;
+    document.body.appendChild(expander);
+
+    // 3. Prepare Content
     document.getElementById('detailTitle').innerText = data.title;
     document.getElementById('detailDescription').innerText = data.description;
     document.getElementById('detailDuration').innerText = data.duration;
     document.getElementById('detailPlants').innerText = data.plants;
-    curtain.style.background = data.color;
 
-    // Inject Images for Kinetic Ribbon
     ribbonTrack.innerHTML = '';
     for (let i = 1; i <= 8; i++) {
         const img = document.createElement('img');
         img.src = `https://placehold.co/600x800/${data.color.replace('#', '')}/FFF?text=${data.title}+${i}`;
         ribbonTrack.appendChild(img);
     }
-    // Duplicate for infinite loop
     ribbonTrack.innerHTML += ribbonTrack.innerHTML;
 
-    // Trigger Transition
-    curtain.classList.add('active');
-    
-    setTimeout(() => {
-        overlay.classList.add('active');
-        document.body.style.overflow = 'hidden'; // Stop scroll
-    }, 400);
+    // 4. Execute Expansion Animation
+    // Trigger reflow to ensure initial state is caught
+    expander.offsetHeight; 
+    expander.classList.add('expanding');
 
     setTimeout(() => {
-        curtain.classList.remove('active');
-    }, 1200);
+        overlay.classList.add('active');
+        detailContent.classList.add('visible');
+        detailNav.classList.add('visible');
+        document.body.style.overflow = 'hidden';
+    }, 600); // Expanding duration is 0.8s, show content slightly before finish
+
+    setTimeout(() => {
+        expander.style.opacity = '0';
+        setTimeout(() => expander.remove(), 500);
+    }, 1000);
 }
 
 function closeProject() {
     const overlay = document.getElementById('projectDetailOverlay');
-    overlay.classList.remove('active');
-    document.body.style.overflow = 'auto'; // Enable scroll
+    const detailContent = document.getElementById('detailContent');
+    const detailNav = document.querySelector('.detail-nav');
+
+    detailContent.classList.remove('visible');
+    detailNav.classList.remove('visible');
+
+    setTimeout(() => {
+        overlay.classList.remove('active');
+        document.body.style.overflow = 'auto';
+    }, 400);
 }
 
 // Parallax Effect for Hero Image (Optional Polish)
