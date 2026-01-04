@@ -442,7 +442,7 @@ animateCursor();
 
 // Cursor Hover Effects (Using delegation for robustness)
 document.addEventListener('mouseover', (e) => {
-    if (e.target.closest('a, button, .modern-card, .project-card, .leaf-handle, .close-btn')) {
+    if (e.target.closest('.nav-links a')) {
         document.body.classList.add('hovering');
     } else {
         document.body.classList.remove('hovering');
