@@ -97,6 +97,22 @@ a:hover, a:focus, a:active {
     text-transform: uppercase;
     letter-spacing: 1px;
     color: var(--text-main);
+    position: relative;
+}
+
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--dark-green);
+    transition: width 0.3s var(--transition-curve);
+}
+
+.nav-links a:hover::after {
+    width: 100%;
 }
 
 .cta-nav {
@@ -539,6 +555,22 @@ a:hover, a:focus, a:active {
     display: inline-flex;
     align-items: center;
     gap: 5px;
+    position: relative;
+}
+
+.link-arrow::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--dark-green);
+    transition: width 0.3s var(--transition-curve);
+}
+
+.link-arrow:hover::after {
+    width: 100%;
 }
 
 /* --- PROJECT SHOWCASE --- */
@@ -727,10 +759,26 @@ footer {
 .footer-nav a {
     color: rgba(255,255,255,0.7);
     transition: color 0.3s;
+    position: relative;
+}
+
+.footer-nav a::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background-color: var(--white);
+    transition: width 0.3s var(--transition-curve);
 }
 
 .footer-nav a:hover {
     color: var(--white);
+}
+
+.footer-nav a:hover::after {
+    width: 100%;
 }
 
 /* --- CARD EXPANSION TRANSITION --- */
