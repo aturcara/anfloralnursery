@@ -321,117 +321,108 @@ a:hover, a:focus, a:active {
     margin-top: 50px;
 }
 
-/* --- NURSERY FULL-WIDTH EXPANDING PANES --- */
-.nursery-fullwidth {
-    display: flex;
-    width: 100vw;
-    height: 80vh;
-    background-color: #000;
-    overflow: hidden;
+/* --- NURSERY EDITORIAL BENTO GRID --- */
+.nursery-bento-section {
+    padding: 10rem 0;
+    background-color: var(--sand);
 }
 
-.nursery-pane {
-    flex: 1;
+.bento-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(2, 350px);
+    gap: 1.5rem;
+    margin-top: 4rem;
+}
+
+.bento-item {
     position: relative;
-    display: flex;
-    align-items: flex-end;
-    padding: 4rem 3rem;
-    cursor: pointer;
+    background-color: var(--white);
     overflow: hidden;
-    background-image: var(--bg-img);
-    background-size: cover;
-    background-position: center;
-    transition: flex 0.8s var(--transition-curve), filter 0.5s ease;
-    filter: grayscale(0.5) brightness(0.7);
+    cursor: pointer;
+    border: 1px solid rgba(0,0,0,0.05);
 }
 
-.pane-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
+/* Bento Item Placements */
+.item-featured {
+    grid-column: span 2;
+    grid-row: span 2;
+}
+
+.item-small {
+    grid-column: span 1;
+}
+
+.item-accent {
+    grid-column: span 2;
+}
+
+.bento-img-wrap {
     width: 100%;
     height: 100%;
-    background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%);
-    z-index: 1;
-    transition: opacity 0.5s;
+    overflow: hidden;
 }
 
-.pane-content {
-    position: relative;
-    z-index: 2;
+.bento-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 1s var(--transition-curve);
+}
+
+.bento-caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 2rem;
+    background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%);
     color: var(--white);
-    transform: translateY(20px);
-    transition: transform 0.6s var(--transition-curve);
+    z-index: 2;
 }
 
-.pane-number {
-    font-family: 'Fredoka', sans-serif;
-    font-size: 1rem;
-    display: block;
-    margin-bottom: 1rem;
-    opacity: 0.6;
-}
-
-.pane-content h3 {
-    font-size: 3rem;
-    line-height: 1;
-    margin-bottom: 1rem;
-}
-
-.pane-content p {
-    font-size: 1rem;
-    max-width: 200px;
-    opacity: 0;
-    transition: opacity 0.4s ease 0.2s;
-}
-
-.pane-btn {
-    margin-top: 2rem;
+.bento-tag {
     display: inline-block;
-    padding: 0.8rem 1.5rem;
-    border: 1px solid var(--white);
+    font-size: 0.65rem;
     text-transform: uppercase;
-    font-size: 0.75rem;
     letter-spacing: 2px;
-    opacity: 0;
-    transform: translateX(-20px);
-    transition: all 0.4s ease 0.3s;
+    background-color: var(--primary-green);
+    color: var(--white);
+    padding: 0.3rem 0.8rem;
+    margin-bottom: 1rem;
 }
 
-/* Hover State */
-.nursery-pane:hover {
-    flex: 2.5; /* Expand width */
-    filter: grayscale(0) brightness(1);
+.bento-caption h3 {
+    font-size: 1.8rem;
+    line-height: 1;
+    margin-bottom: 0.5rem;
 }
 
-.nursery-pane:hover .pane-content {
-    transform: translateY(0);
+.bento-caption p {
+    font-size: 0.9rem;
+    opacity: 0.8;
 }
 
-.nursery-pane:hover .pane-content p,
-.nursery-pane:hover .pane-btn {
-    opacity: 1;
-    transform: translateX(0);
+/* Bento Hover Effects */
+.bento-item:hover img {
+    transform: scale(1.05);
 }
 
-/* Mobile Adjustments */
+.bento-item:hover .bento-caption h3 {
+    text-decoration: underline; /* Minimal feedback */
+}
+
+/* Mobile Bento */
 @media screen and (max-width: 768px) {
-    .nursery-fullwidth {
-        flex-direction: column;
-        height: auto;
+    .bento-grid {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+        gap: 1rem;
     }
-    .nursery-pane {
-        flex: none;
-        width: 100%;
+    .item-featured, .item-small, .item-accent {
+        grid-column: span 1;
+        grid-row: span 1;
         height: 400px;
-        filter: grayscale(0) brightness(0.8);
-    }
-    .nursery-pane:hover {
-        flex: none;
-    }
-    .pane-content p, .pane-btn {
-        opacity: 1;
-        transform: none;
     }
 }
 

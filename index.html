@@ -154,49 +154,58 @@
         </div>
     </section>
 
-    <!-- Nursery Showcase (Full-Width Expanding Panes) -->
-    <section id="shop" class="nursery-fullwidth">
-        <!-- Pane 1 -->
-        <div class="nursery-pane reveal-up" onclick="whatsAppOrder('Tanaman Aglaonema')" style="--bg-img: url('https://placehold.co/1200x1600/1a472a/FFF?text=Aglaonema')">
-            <div class="pane-overlay"></div>
-            <div class="pane-content">
-                <span class="pane-number">01</span>
-                <h3>Aglaonema</h3>
-                <p>Seri Laman Tropika</p>
-                <div class="pane-btn">Shop Collection</div>
+    <!-- Nursery Showcase (Editorial Bento Grid) -->
+    <section id="shop" class="nursery-bento-section">
+        <div class="container">
+            <div class="section-header reveal-up">
+                <h2>Koleksi Nurseri</h2>
+                <p>Pilihan kurasi tanaman premium untuk penyeri setiap sudut ruang anda.</p>
             </div>
-        </div>
 
-        <!-- Pane 2 -->
-        <div class="nursery-pane reveal-up delay-100" onclick="whatsAppOrder('Tanaman Begonia')" style="--bg-img: url('https://placehold.co/1200x1600/27ae60/FFF?text=Begonia')">
-            <div class="pane-overlay"></div>
-            <div class="pane-content">
-                <span class="pane-number">02</span>
-                <h3>Begonia</h3>
-                <p>Warna-warni Estetik</p>
-                <div class="pane-btn">Shop Collection</div>
-            </div>
-        </div>
+            <div class="bento-grid">
+                <!-- Item 1: Featured Large -->
+                <div class="bento-item item-featured reveal-up" onclick="whatsAppOrder('Tanaman Aglaonema')">
+                    <div class="bento-img-wrap">
+                        <img src="https://placehold.co/800x800/1a472a/FFF?text=Aglaonema" alt="Aglaonema">
+                    </div>
+                    <div class="bento-caption">
+                        <span class="bento-tag">Featured</span>
+                        <h3>Aglaonema</h3>
+                        <p>The Collector's Choice</p>
+                    </div>
+                </div>
 
-        <!-- Pane 3 -->
-        <div class="nursery-pane reveal-up delay-200" onclick="whatsAppOrder('Tanaman Pothos')" style="--bg-img: url('https://placehold.co/1200x1600/2e7d32/FFF?text=Pothos')">
-            <div class="pane-overlay"></div>
-            <div class="pane-content">
-                <span class="pane-number">03</span>
-                <h3>Pothos</h3>
-                <p>Penapis Udara Semulajadi</p>
-                <div class="pane-btn">Shop Collection</div>
-            </div>
-        </div>
+                <!-- Item 2: Small -->
+                <div class="bento-item item-small reveal-up delay-100" onclick="whatsAppOrder('Tanaman Begonia')">
+                    <div class="bento-img-wrap">
+                        <img src="https://placehold.co/400x400/27ae60/FFF?text=Begonia" alt="Begonia">
+                    </div>
+                    <div class="bento-caption">
+                        <h3>Begonia</h3>
+                    </div>
+                </div>
 
-        <!-- Pane 4 -->
-        <div class="nursery-pane reveal-up delay-300" onclick="whatsAppOrder('Tanaman Philodendron')" style="--bg-img: url('https://placehold.co/1200x1600/1b5e20/FFF?text=Philodendron')">
-            <div class="pane-overlay"></div>
-            <div class="pane-content">
-                <span class="pane-number">04</span>
-                <h3>Philodendron</h3>
-                <p>Eksklusif & Rimbun</p>
-                <div class="pane-btn">Shop Collection</div>
+                <!-- Item 3: Small -->
+                <div class="bento-item item-small reveal-up delay-200" onclick="whatsAppOrder('Tanaman Pothos')">
+                    <div class="bento-img-wrap">
+                        <img src="https://placehold.co/400x400/2e7d32/FFF?text=Pothos" alt="Pothos">
+                    </div>
+                    <div class="bento-caption">
+                        <h3>Pothos</h3>
+                    </div>
+                </div>
+
+                <!-- Item 4: Tall/Wide -->
+                <div class="bento-item item-accent reveal-up delay-300" onclick="whatsAppOrder('Tanaman Philodendron')">
+                    <div class="bento-img-wrap">
+                        <img src="https://placehold.co/800x400/1b5e20/FFF?text=Philodendron" alt="Philodendron">
+                    </div>
+                    <div class="bento-caption">
+                        <span class="bento-tag">New Arrival</span>
+                        <h3>Philodendron</h3>
+                        <p>Tropical Elegance</p>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
