@@ -372,54 +372,79 @@ document.addEventListener('DOMContentLoaded', () => {
     initHeaderDrag(); // For standalone project pages
 });
 
-// --- CUSTOM CURSOR PHYSICS ---
+// --- CUSTOM CURSOR PHYSICS (SPRING-DAMPER & SQUASH/STRETCH) ---
 const cursorDot = document.querySelector('.cursor-dot');
 const cursorOutline = document.querySelector('.cursor-outline');
 const cursorOuterLine = document.querySelector('.cursor-outer-line');
 
-let mouseX = 0;
-let mouseY = 0;
-let dotX = 0;
-let dotY = 0;
-let outlineX = 0;
-let outlineY = 0;
-let outerLineX = 0;
-let outerLineY = 0;
+let mouse = { x: 0, y: 0 };
+let dot = { x: 0, y: 0 };
+let outline = { x: 0, y: 0, vx: 0, vy: 0 };
+let outerLine = { x: 0, y: 0, vx: 0, vy: 0 };
 
 window.addEventListener('mousemove', (e) => {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
+    mouse.x = e.clientX;
+    mouse.y = e.clientY;
     
-    // Show cursor on first movement
     cursorDot.style.opacity = '1';
     cursorOutline.style.opacity = '1';
     if (cursorOuterLine) cursorOuterLine.style.opacity = '1';
 });
 
 const animateCursor = () => {
-    // Physics: Linear Interpolation (Lerp)
-    dotX += (mouseX - dotX) * 0.3;
-    dotY += (mouseY - dotY) * 0.3;
-    
-    outlineX += (mouseX - outlineX) * 0.15;
-    outlineY += (mouseY - outlineY) * 0.15;
+    // 1. Dot Logic (Simple Lerp for precision)
+    dot.x += (mouse.x - dot.x) * 0.4;
+    dot.y += (mouse.y - dot.y) * 0.4;
 
-    outerLineX += (mouseX - outerLineX) * 0.08; // Even slower for heavy feel
-    outerLineY += (mouseY - outerLineY) * 0.08;
+    // 2. Outline Physics (Spring-Damper)
+    const outlineStiffness = 0.15;
+    const outlineDamping = 0.7;
     
+    outline.vx += (mouse.x - outline.x) * outlineStiffness;
+    outline.vy += (mouse.y - outline.y) * outlineStiffness;
+    outline.vx *= outlineDamping;
+    outline.vy *= outlineDamping;
+    outline.x += outline.vx;
+    outline.y += outline.vy;
+
+    // 3. Outer Line Physics (Heavier Spring)
+    const outerStiffness = 0.05;
+    const outerDamping = 0.85;
+    
+    outerLine.vx += (mouse.x - outerLine.x) * outerStiffness;
+    outerLine.vy += (mouse.y - outerLine.y) * outerStiffness;
+    outerLine.vx *= outerDamping;
+    outerLine.vy *= outerDamping;
+    outerLine.x += outerLine.vx;
+    outerLine.y += outerLine.vy;
+
+    // 4. Transform & Squash/Stretch Logic
     const isHovering = document.body.classList.contains('hovering');
-    const dotScale = isHovering ? 0 : 1;
-    const outlineScale = isHovering ? 1.5 : 1;
-
-    cursorDot.style.transform = `translate(${dotX - 4}px, ${dotY - 4}px) scale(${dotScale})`;
-    cursorOutline.style.transform = `translate(${outlineX - 20}px, ${outlineY - 20}px) scale(${outlineScale})`;
     
+    // Dot Transform
+    cursorDot.style.transform = `translate(${dot.x - 4}px, ${dot.y - 4}px) scale(${isHovering ? 0 : 1})`;
+
+    // Outline Visuals (Dynamic Scaling/Skew based on speed)
+    const speed = Math.hypot(outline.vx, outline.vy);
+    const angle = Math.atan2(outline.vy, outline.vx) * 180 / Math.PI;
+    const stretch = Math.min(speed / 20, 0.5); // Max 50% stretch
+    
+    const outlineScale = isHovering ? 1.5 : 1;
+    cursorOutline.style.transform = `translate(${outline.x - 20}px, ${outline.y - 20}px) rotate(${angle}deg) scale(${outlineScale + stretch}, ${outlineScale - stretch})`;
+
+    // Outer Line Visuals (Slower, heavy swing)
     if (cursorOuterLine) {
-        cursorOuterLine.style.transform = `translate(${outerLineX - 50}px, ${outerLineY - 50}px)`;
+        const outerSpeed = Math.hypot(outerLine.vx, outerLine.vy);
+        const outerAngle = Math.atan2(outerLine.vy, outerLine.vx) * 180 / Math.PI;
+        const outerStretch = Math.min(outerSpeed / 40, 0.3);
+        
+        cursorOuterLine.style.transform = `translate(${outerLine.x - 50}px, ${outerLine.y - 50}px) rotate(${outerAngle}deg) scale(${1 + outerStretch}, ${1 - outerStretch})`;
     }
     
     requestAnimationFrame(animateCursor);
 };
+
+animateCursor();
 
 animateCursor();
 
