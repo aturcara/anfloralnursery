@@ -27,39 +27,7 @@ h1, h2, h3, h4, .logo {
     font-weight: 600;
 }
 
-/* --- ANIMATED LOGO --- */
-.logo-leaf {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.leaf-svg {
-    width: 1.2em;
-    height: 1.2em;
-    color: var(--primary-green);
-    fill: rgba(46, 204, 113, 0.2); /* Semi-transparent fill */
-    transform-origin: 0% 100%; /* Pivot at the stem (bottom left) */
-    animation: leaf-sway 4s ease-in-out infinite;
-    margin-right: 5px;
-}
-
-@keyframes leaf-sway {
-    0% { transform: rotate(0deg) scale(1); }
-    30% { transform: rotate(-8deg) scale(1.05); }
-    70% { transform: rotate(5deg) scale(0.95); }
-    100% { transform: rotate(0deg) scale(1); }
-}
-
-.logo:hover .leaf-svg {
-    animation: leaf-shake 0.5s ease-in-out infinite;
-}
-
-@keyframes leaf-shake {
-    0%, 100% { transform: rotate(0deg); }
-    25% { transform: rotate(-15deg); }
-    75% { transform: rotate(15deg); }
-}
+/* --- ANIMATED LOGO REMOVED --- */
 
 /* --- ANIMATION ENGINE --- */
 .reveal-up {
