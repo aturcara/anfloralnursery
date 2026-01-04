@@ -295,33 +295,22 @@ const counterObserver = new IntersectionObserver((entries) => {
 
 document.querySelectorAll('.counter').forEach(c => counterObserver.observe(c));
 
-// --- TESTIMONIALS SLIDER ---
+// --- TESTIMONIALS DRAG ---
 
 const track = document.getElementById('testimonialTrack');
-const handle = document.getElementById('leafHandle');
-const growthBar = document.getElementById('growthBar');
-const sliderBg = document.querySelector('.growth-track-bg');
 const universe = document.querySelector('.testimonial-universe');
 
-let isDragging = false;
 let isDraggingTrack = false;
 let currentPercent = 0;
 
 const updateUI = (percent) => {
     percent = Math.max(0, Math.min(1, percent));
     currentPercent = percent;
-    if (handle) handle.style.left = `${percent * 100}%`;
-    if (growthBar) growthBar.style.width = `${percent * 100}%`;
     if (track) {
         const trackMax = track.scrollWidth - window.innerWidth + (window.innerWidth * 0.1);
         track.style.transform = `translateX(${-percent * trackMax}px)`;
     }
 };
-
-if (handle) {
-    handle.addEventListener('mousedown', () => isDragging = true);
-    handle.addEventListener('touchstart', () => isDragging = true, {passive: true});
-}
 
 let trackStartX, initialPercent;
 if (universe) {
@@ -337,10 +326,6 @@ if (universe) {
 }
 
 window.addEventListener('mousemove', (e) => {
-    if (isDragging && sliderBg) {
-        const rect = sliderBg.getBoundingClientRect();
-        updateUI((e.clientX - rect.left) / rect.width);
-    }
     if (isDraggingTrack) {
         const walk = e.clientX - trackStartX;
         const trackMax = track.scrollWidth - window.innerWidth;
@@ -349,10 +334,6 @@ window.addEventListener('mousemove', (e) => {
 });
 
 window.addEventListener('touchmove', (e) => {
-    if (isDragging && sliderBg) {
-        const rect = sliderBg.getBoundingClientRect();
-        updateUI((e.touches[0].clientX - rect.left) / rect.width);
-    }
     if (isDraggingTrack) {
         const walk = e.touches[0].clientX - trackStartX;
         const trackMax = track.scrollWidth - window.innerWidth;
@@ -361,7 +342,7 @@ window.addEventListener('touchmove', (e) => {
 }, {passive: false});
 
 const endDrag = () => {
-    isDragging = isDraggingTrack = false;
+    isDraggingTrack = false;
     if (track) track.style.transition = 'transform 0.8s cubic-bezier(0.22, 1, 0.36, 1)';
 };
 window.addEventListener('mouseup', endDrag);
