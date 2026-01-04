@@ -145,6 +145,7 @@ h1, h2, h3, h4, .logo {
     overflow: hidden;
     margin-top: 2rem;
     position: relative;
+    z-index: 10; /* Ensure it stays above following relative sections */
 }
 
 .hero-img {
