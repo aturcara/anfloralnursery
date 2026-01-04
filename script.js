@@ -423,19 +423,16 @@ const animateCursor = () => {
     // Outline Visuals
     const speed = Math.hypot(outline.vx, outline.vy);
     
-    // Fixed slanted tilt (e.g. 15deg) instead of dynamic spin
-    const fixedTilt = 15;
-    
     const stretch = Math.min(speed / 20, 0.5);
     const outlineScale = isHovering ? 1.5 : 1;
-    cursorOutline.style.transform = `translate(${outline.x - 20}px, ${outline.y - 20}px) rotate(${fixedTilt}deg) scale(${outlineScale + stretch}, ${outlineScale - stretch})`;
+    cursorOutline.style.transform = `translate(${outline.x - 20}px, ${outline.y - 20}px) scale(${outlineScale + stretch}, ${outlineScale - stretch})`;
 
     // Outer Line Visuals (Slower, heavy swing)
     if (cursorOuterLine) {
         const outerSpeed = Math.hypot(outerLine.vx, outerLine.vy);
         const outerStretch = Math.min(outerSpeed / 40, 0.3);
         
-        cursorOuterLine.style.transform = `translate(${outerLine.x - 50}px, ${outerLine.y - 50}px) rotate(${fixedTilt}deg) scale(${1 + outerStretch}, ${1 - outerStretch})`;
+        cursorOuterLine.style.transform = `translate(${outerLine.x - 50}px, ${outerLine.y - 50}px) scale(${1 + outerStretch}, ${1 - outerStretch})`;
     }
     
     requestAnimationFrame(animateCursor);
