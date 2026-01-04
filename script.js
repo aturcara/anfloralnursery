@@ -122,9 +122,14 @@ function initHeaderDrag() {
     window.addEventListener('touchend', stopHeaderDrag);
 }
 
+let lastClickedEl = null;
+
 function openProject(id, el) {
+    console.log('Attempting to open project:', id);
     const data = projectData[id];
     if (!data) return;
+
+    lastClickedEl = el; // Store for reverse transition
 
     const overlay = document.getElementById('projectDetailOverlay');
     const ribbonTrack = document.getElementById('ribbonTrack');
@@ -134,6 +139,7 @@ function openProject(id, el) {
 
     if (!overlay || !ribbonTrack || !detailContent || !detailNav) return;
 
+    // Update URL
     try { history.pushState({ projectId: id }, '', `${id}.html`); } catch (e) { }
 
     const rect = el.getBoundingClientRect();
@@ -150,6 +156,7 @@ function openProject(id, el) {
     });
     document.body.appendChild(expander);
 
+    // Prepare Content
     document.getElementById('detailTitle').innerText = data.title;
     document.getElementById('detailDescription').innerText = data.description;
     document.getElementById('detailDuration').innerText = data.duration;
@@ -164,7 +171,6 @@ function openProject(id, el) {
         ribbonTrack.appendChild(img);
     }
     
-    // Reset positions for new project
     headerCurrentX = 0;
     autoplayDirection = -1;
     ribbonTrack.style.transform = 'translateX(0)';
@@ -191,16 +197,58 @@ function closeProject(isBackAction = false) {
     const detailContent = document.getElementById('detailContent');
     const detailNav = document.querySelector('.detail-nav');
 
-    if (detailContent) detailContent.classList.remove('visible');
-    if (detailNav) detailNav.classList.remove('visible');
+    if (!overlay || !overlay.classList.contains('active')) return;
 
-    setTimeout(() => {
-        if (overlay) overlay.classList.remove('active');
-        document.body.style.overflow = 'auto';
-        if (!isBackAction) {
-            try { history.pushState(null, '', 'index.html'); } catch(e){}
-        }
-    }, 400);
+    detailContent.classList.remove('visible');
+    detailNav.classList.remove('visible');
+
+    // REVERSE TRANSITION
+    if (lastClickedEl) {
+        const rect = lastClickedEl.getBoundingClientRect();
+        const data = projectData[overlay.querySelector('h1').innerText.toLowerCase().replace(/ /g, '-')]; 
+        // fallback color if parsing title fails
+        const bgColor = (data && data.color) ? data.color : 'var(--dark-green)';
+
+        const shrinker = document.createElement('div');
+        shrinker.className = 'card-expander expanding'; // Start full screen
+        Object.assign(shrinker.style, {
+            top: '0', left: '0', width: '100vw', height: '100vh',
+            background: bgColor,
+            position: 'fixed', zIndex: '10000', opacity: '1'
+        });
+        document.body.appendChild(shrinker);
+
+        // Hide overlay immediately to show shrinker
+        overlay.classList.remove('active');
+
+        requestAnimationFrame(() => {
+            // Animate back to original card rect
+            shrinker.style.top = `${rect.top}px`;
+            shrinker.style.left = `${rect.left}px`;
+            shrinker.style.width = `${rect.width}px`;
+            shrinker.style.height = `${rect.height}px`;
+            shrinker.style.borderRadius = '20px';
+            shrinker.classList.remove('expanding');
+        });
+
+        setTimeout(() => {
+            shrinker.style.opacity = '0';
+            setTimeout(() => shrinker.remove(), 500);
+        }, 800);
+    } else {
+        // Simple fade if no reference card (direct landing)
+        overlay.style.transition = 'opacity 0.4s ease';
+        overlay.style.opacity = '0';
+        setTimeout(() => {
+            overlay.classList.remove('active');
+            overlay.style.opacity = '1';
+        }, 400);
+    }
+
+    document.body.style.overflow = 'auto';
+    if (!isBackAction) {
+        try { history.pushState(null, '', 'index.html'); } catch(e){}
+    }
 }
 
 window.addEventListener('popstate', (e) => {
