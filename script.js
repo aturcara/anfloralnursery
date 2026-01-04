@@ -325,6 +325,38 @@ const initInfiniteTestimonials = () => {
     currentTranslateX = -trackBaseWidth;
     track.style.transition = 'none';
     track.style.transform = `translateX(${currentTranslateX}px)`;
+    updateActiveCard();
+};
+
+const updateActiveCard = () => {
+    if (!track) return;
+    const cards = Array.from(track.children);
+    if (cards.length === 0) return;
+
+    const cardWidth = cards[0].offsetWidth;
+    const gap = parseFloat(window.getComputedStyle(track).gap) || 0;
+    const step = cardWidth + gap;
+
+    // Center point relative to track
+    const centerX = -currentTranslateX + (window.innerWidth / 2);
+    
+    // Find closest card to center
+    let closestIndex = 0;
+    let minDistance = Infinity;
+
+    cards.forEach((card, index) => {
+        const cardX = (index * step) + (cardWidth / 2);
+        const distance = Math.abs(centerX - cardX);
+        if (distance < minDistance) {
+            minDistance = distance;
+            closestIndex = index;
+        }
+        card.classList.remove('active');
+    });
+
+    if (cards[closestIndex]) {
+        cards[closestIndex].classList.add('active');
+    }
 };
 
 const updateTestimonialPos = (newX, useTransition = false) => {
@@ -335,17 +367,18 @@ const updateTestimonialPos = (newX, useTransition = false) => {
     // Boundary Wrap
     if (currentTranslateX <= -trackBaseWidth * 2) {
         currentTranslateX += trackBaseWidth;
-    } else if (currentTranslateX >= -trackBaseWidth * 0.5) { // Adjusted for 3 sets
+    } else if (currentTranslateX >= -trackBaseWidth * 0.5) {
         currentTranslateX -= trackBaseWidth;
     }
 
     if (useTransition) {
-        track.style.transition = 'transform 0.8s var(--transition-curve)';
+        track.style.transition = 'transform 0.5s var(--transition-curve)';
     } else {
         track.style.transition = 'none';
     }
     
     track.style.transform = `translateX(${currentTranslateX}px)`;
+    updateActiveCard();
 };
 
 const startTestimonialAutoplay = () => {
