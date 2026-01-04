@@ -130,6 +130,13 @@ h1, h2, h3, h4, .logo {
     max-width: 600px;
 }
 
+.parallax-element {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    will-change: transform;
+}
+
 .hero-image-container {
     width: 100%;
     max-width: 1200px;

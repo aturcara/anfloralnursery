@@ -324,10 +324,20 @@ document.addEventListener('DOMContentLoaded', () => {
     initHeaderDrag(); // For standalone project pages
 });
 
-// Parallax
+// --- PARALLAX ---
 const heroImg = document.querySelector('.hero-img');
+const parallaxEl = document.querySelector('.parallax-element');
+
 window.addEventListener('scroll', () => {
+    let scrollPosition = window.scrollY;
+    
+    if (parallaxEl) {
+        // Move the whole element container (the green box)
+        parallaxEl.style.transform = `translateY(${scrollPosition * 0.1}px)`;
+    }
+    
     if (heroImg) {
-        heroImg.style.transform = `translateY(${window.scrollY * 0.1}px)`;
+        // Counter-movement for internal image
+        heroImg.style.transform = `translateY(${-scrollPosition * 0.05}px) scale(1.1)`;
     }
 });
