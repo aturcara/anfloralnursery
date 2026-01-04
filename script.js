@@ -380,7 +380,7 @@ window.addEventListener('touchmove', (e) => {
 const endDrag = () => {
     if (!isDraggingTrack) return;
     isDraggingTrack = false;
-    if (track) track.style.transition = 'transform 0.8s cubic-bezier(0.22, 1, 0.36, 1)';
+    if (track) track.style.transition = 'transform 0.5s var(--transition-curve)';
     
     // Sync the index back after manual drag
     const cards = document.querySelectorAll('.t-card');

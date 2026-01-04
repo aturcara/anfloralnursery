@@ -451,6 +451,7 @@ a:hover, a:focus, a:active {
     padding: 0 5%;
     width: max-content;
     will-change: transform;
+    transition: transform 0.5s var(--transition-curve);
 }
 
 .t-card {
