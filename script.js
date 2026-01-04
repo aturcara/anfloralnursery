@@ -295,13 +295,15 @@ const counterObserver = new IntersectionObserver((entries) => {
 
 document.querySelectorAll('.counter').forEach(c => counterObserver.observe(c));
 
-// --- TESTIMONIALS DRAG ---
+// --- TESTIMONIALS DRAG & AUTOPLAY ---
 
 const track = document.getElementById('testimonialTrack');
 const universe = document.querySelector('.testimonial-universe');
 
 let isDraggingTrack = false;
 let currentPercent = 0;
+let testimonialAutoplayId = null;
+let testimonialIndex = 0;
 
 const updateUI = (percent) => {
     percent = Math.max(0, Math.min(1, percent));
@@ -312,9 +314,43 @@ const updateUI = (percent) => {
     }
 };
 
+const startTestimonialAutoplay = () => {
+    stopTestimonialAutoplay();
+    testimonialAutoplayId = setInterval(() => {
+        if (isDraggingTrack) return;
+
+        const cards = document.querySelectorAll('.t-card');
+        if (cards.length === 0) return;
+
+        // Calculate how many cards can fit in the track scroll
+        const trackMax = track.scrollWidth - window.innerWidth;
+        const cardWidth = cards[0].offsetWidth;
+        const style = window.getComputedStyle(track);
+        const gap = parseFloat(style.gap) || 0;
+        const stepPixels = cardWidth + gap;
+        const totalSteps = Math.ceil(trackMax / stepPixels);
+
+        testimonialIndex++;
+        if (testimonialIndex > totalSteps) {
+            testimonialIndex = 0;
+        }
+
+        const targetPercent = (testimonialIndex * stepPixels) / trackMax;
+        updateUI(targetPercent);
+    }, 5000);
+};
+
+const stopTestimonialAutoplay = () => {
+    if (testimonialAutoplayId) {
+        clearInterval(testimonialAutoplayId);
+        testimonialAutoplayId = null;
+    }
+};
+
 let trackStartX, initialPercent;
 if (universe) {
     const startTrackDrag = (e) => {
+        stopTestimonialAutoplay();
         isDraggingTrack = true;
         const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
         trackStartX = clientX;
@@ -342,8 +378,22 @@ window.addEventListener('touchmove', (e) => {
 }, {passive: false});
 
 const endDrag = () => {
+    if (!isDraggingTrack) return;
     isDraggingTrack = false;
     if (track) track.style.transition = 'transform 0.8s cubic-bezier(0.22, 1, 0.36, 1)';
+    
+    // Sync the index back after manual drag
+    const cards = document.querySelectorAll('.t-card');
+    if (cards.length > 0) {
+        const trackMax = track.scrollWidth - window.innerWidth;
+        const cardWidth = cards[0].offsetWidth;
+        const gap = parseFloat(window.getComputedStyle(track).gap) || 0;
+        const stepPixels = cardWidth + gap;
+        testimonialIndex = Math.round((currentPercent * trackMax) / stepPixels);
+    }
+    
+    // Resume autoplay after a small delay
+    setTimeout(startTestimonialAutoplay, 2000);
 };
 window.addEventListener('mouseup', endDrag);
 window.addEventListener('touchend', endDrag);
@@ -351,6 +401,7 @@ window.addEventListener('touchend', endDrag);
 // --- INITIALIZE ON LOAD ---
 document.addEventListener('DOMContentLoaded', () => {
     initHeaderDrag(); // For standalone project pages
+    startTestimonialAutoplay(); // Start testimonials autoplay
 });
 
 // --- PARALLAX ---
