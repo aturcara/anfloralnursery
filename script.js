@@ -73,40 +73,83 @@ const track = document.getElementById('testimonialTrack');
 const handle = document.getElementById('leafHandle');
 const growthBar = document.getElementById('growthBar');
 const sliderBg = document.querySelector('.growth-track-bg');
+const universe = document.querySelector('.testimonial-universe');
 
 let isDragging = false;
+let isDraggingTrack = false;
 let startX;
-let scrollLeft;
+let currentPercent = 0;
 
-const updateSlider = (e) => {
-    if (!isDragging) return;
-    
-    const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
-    const rect = sliderBg.getBoundingClientRect();
-    let x = clientX - rect.left;
-    
-    // Boundary checks
-    if (x < 0) x = 0;
-    if (x > rect.width) x = rect.width;
-    
-    const percent = x / rect.width;
-    
+// Function to update UI from percent (0 to 1)
+const updateUI = (percent) => {
+    if (percent < 0) percent = 0;
+    if (percent > 1) percent = 1;
+    currentPercent = percent;
+
     // Update Slider UI
     handle.style.left = `${percent * 100}%`;
     growthBar.style.width = `${percent * 100}%`;
     
     // Update Track Position
-    const trackMax = track.scrollWidth - window.innerWidth;
+    const trackMax = track.scrollWidth - window.innerWidth + (window.innerWidth * 0.1); // include padding
     track.style.transform = `translateX(${-percent * trackMax}px)`;
 };
 
-handle.addEventListener('mousedown', () => isDragging = true);
-window.addEventListener('mouseup', () => isDragging = false);
-window.addEventListener('mousemove', updateSlider);
+// Slider Drag Logic
+const onSliderMove = (e) => {
+    if (!isDragging) return;
+    const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+    const rect = sliderBg.getBoundingClientRect();
+    let x = clientX - rect.left;
+    updateUI(x / rect.width);
+};
 
+// Track Drag Logic
+let trackStartX;
+let initialPercent;
+
+const onTrackStart = (e) => {
+    isDraggingTrack = true;
+    const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+    trackStartX = clientX;
+    initialPercent = currentPercent;
+    track.style.transition = 'none'; // Snappy drag
+};
+
+const onTrackMove = (e) => {
+    if (!isDraggingTrack) return;
+    const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+    const walk = clientX - trackStartX;
+    const trackMax = track.scrollWidth - window.innerWidth;
+    const percentChange = walk / trackMax;
+    updateUI(initialPercent - percentChange);
+};
+
+const onDragEnd = () => {
+    isDragging = false;
+    isDraggingTrack = false;
+    track.style.transition = 'transform 0.8s cubic-bezier(0.22, 1, 0.36, 1)';
+};
+
+// Event Listeners for Slider
+handle.addEventListener('mousedown', () => isDragging = true);
 handle.addEventListener('touchstart', () => isDragging = true);
-window.addEventListener('touchend', () => isDragging = false);
-window.addEventListener('touchmove', updateSlider);
+
+// Event Listeners for Track
+universe.addEventListener('mousedown', onTrackStart);
+universe.addEventListener('touchstart', onTrackStart);
+
+// Global Listeners
+window.addEventListener('mousemove', (e) => {
+    onSliderMove(e);
+    onTrackMove(e);
+});
+window.addEventListener('touchmove', (e) => {
+    onSliderMove(e);
+    onTrackMove(e);
+});
+window.addEventListener('mouseup', onDragEnd);
+window.addEventListener('touchend', onDragEnd);
 
 // Parallax Effect for Hero Image (Optional Polish)
 const heroImg = document.querySelector('.hero-img');
