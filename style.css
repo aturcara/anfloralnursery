@@ -374,26 +374,19 @@ a:hover, a:focus, a:active {
     position: fixed;
     top: 0;
     left: 0;
-    border-radius: 50%;
+    border-radius: 0; /* Back to Square */
     z-index: 10000;
     opacity: 0;
     mix-blend-mode: difference;
     transition: opacity 0.3s ease-in-out;
 }
 
-/* Biggest one only by default */
-.cursor-outer-line {
-    width: 100px;
-    height: 100px;
-    border: 0.5px solid rgba(255, 255, 255, 0.5);
-}
-
-/* Hide small ones by default */
-.cursor-dot, .cursor-outline {
+/* Hide all by default */
+.cursor-dot, .cursor-outer-line, .cursor-outline {
     display: none;
 }
 
-/* Hover State */
+/* Only show outline on hover */
 body.hovering .cursor-outline {
     display: block;
     width: 60px;
@@ -401,10 +394,6 @@ body.hovering .cursor-outline {
     background-color: var(--white);
     border-color: transparent;
     opacity: 1;
-}
-
-body.hovering .cursor-outer-line {
-    opacity: 0 !important;
 }
 
 @media (hover: none) and (pointer: coarse) {
