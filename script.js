@@ -295,23 +295,56 @@ const counterObserver = new IntersectionObserver((entries) => {
 
 document.querySelectorAll('.counter').forEach(c => counterObserver.observe(c));
 
-// --- TESTIMONIALS DRAG & AUTOPLAY ---
+// --- TESTIMONIALS DRAG & AUTOPLAY (INFINITE LOOP) ---
 
 const track = document.getElementById('testimonialTrack');
 const universe = document.querySelector('.testimonial-universe');
 
 let isDraggingTrack = false;
-let currentPercent = 0;
 let testimonialAutoplayId = null;
-let testimonialIndex = 0;
+let currentTranslateX = 0;
+let trackBaseWidth = 0;
 
-const updateUI = (percent) => {
-    percent = Math.max(0, Math.min(1, percent));
-    currentPercent = percent;
-    if (track) {
-        const trackMax = track.scrollWidth - window.innerWidth + (window.innerWidth * 0.1);
-        track.style.transform = `translateX(${-percent * trackMax}px)`;
+// Initialize Infinite Loop
+const initInfiniteTestimonials = () => {
+    if (!track) return;
+    const cards = Array.from(track.children);
+    if (cards.length === 0) return;
+
+    // Clone once to start
+    const clone = track.innerHTML;
+    track.innerHTML = clone + clone + clone; // 3 Sets for safety
+    
+    // Calculate width of one set
+    const style = window.getComputedStyle(track);
+    const gap = parseFloat(style.gap) || 0;
+    trackBaseWidth = (cards[0].offsetWidth + gap) * cards.length;
+    
+    // Start in the middle set
+    currentTranslateX = -trackBaseWidth;
+    track.style.transition = 'none';
+    track.style.transform = `translateX(${currentTranslateX}px)`;
+};
+
+const updateTestimonialPos = (deltaX, useTransition = true) => {
+    if (!track) return;
+    
+    if (!useTransition) track.style.transition = 'none';
+    else track.style.transition = 'transform 0.5s var(--transition-curve)';
+
+    currentTranslateX += deltaX;
+    
+    // Seamless Jump logic
+    if (currentTranslateX <= -trackBaseWidth * 2) {
+        currentTranslateX += trackBaseWidth;
+        // Instant teleport
+        track.style.transition = 'none';
+    } else if (currentTranslateX >= 0) {
+        currentTranslateX -= trackBaseWidth;
+        track.style.transition = 'none';
     }
+
+    track.style.transform = `translateX(${currentTranslateX}px)`;
 };
 
 const startTestimonialAutoplay = () => {
@@ -319,24 +352,11 @@ const startTestimonialAutoplay = () => {
     testimonialAutoplayId = setInterval(() => {
         if (isDraggingTrack) return;
 
-        const cards = document.querySelectorAll('.t-card');
-        if (cards.length === 0) return;
-
-        // Calculate how many cards can fit in the track scroll
-        const trackMax = track.scrollWidth - window.innerWidth;
-        const cardWidth = cards[0].offsetWidth;
-        const style = window.getComputedStyle(track);
-        const gap = parseFloat(style.gap) || 0;
-        const stepPixels = cardWidth + gap;
-        const totalSteps = Math.ceil(trackMax / stepPixels);
-
-        testimonialIndex++;
-        if (testimonialIndex > totalSteps) {
-            testimonialIndex = 0;
-        }
-
-        const targetPercent = (testimonialIndex * stepPixels) / trackMax;
-        updateUI(targetPercent);
+        const card = document.querySelector('.t-card');
+        const gap = parseFloat(window.getComputedStyle(track).gap) || 0;
+        const step = -(card.offsetWidth + gap);
+        
+        updateTestimonialPos(step);
     }, 5000);
 };
 
@@ -347,14 +367,16 @@ const stopTestimonialAutoplay = () => {
     }
 };
 
-let trackStartX, initialPercent;
+let trackStartX;
+let startTranslateX;
+
 if (universe) {
     const startTrackDrag = (e) => {
         stopTestimonialAutoplay();
         isDraggingTrack = true;
         const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
         trackStartX = clientX;
-        initialPercent = currentPercent;
+        startTranslateX = currentTranslateX;
         if (track) track.style.transition = 'none';
     };
     universe.addEventListener('mousedown', startTrackDrag);
@@ -362,37 +384,57 @@ if (universe) {
 }
 
 window.addEventListener('mousemove', (e) => {
-    if (isDraggingTrack) {
-        const walk = e.clientX - trackStartX;
-        const trackMax = track.scrollWidth - window.innerWidth;
-        updateUI(initialPercent - (walk / (trackMax || 1)));
+    if (!isDraggingTrack) return;
+    const clientX = e.clientX;
+    const walk = clientX - trackStartX;
+    currentTranslateX = startTranslateX + walk;
+    
+    // Loop during drag
+    if (currentTranslateX <= -trackBaseWidth * 2) {
+        startTranslateX += trackBaseWidth;
+        currentTranslateX += trackBaseWidth;
+    } else if (currentTranslateX >= 0) {
+        startTranslateX -= trackBaseWidth;
+        currentTranslateX -= trackBaseWidth;
     }
+    
+    track.style.transform = `translateX(${currentTranslateX}px)`;
 });
 
 window.addEventListener('touchmove', (e) => {
-    if (isDraggingTrack) {
-        const walk = e.touches[0].clientX - trackStartX;
-        const trackMax = track.scrollWidth - window.innerWidth;
-        updateUI(initialPercent - (walk / (trackMax || 1)));
+    if (!isDraggingTrack) return;
+    const clientX = e.touches[0].clientX;
+    const walk = clientX - trackStartX;
+    currentTranslateX = startTranslateX + walk;
+
+    if (currentTranslateX <= -trackBaseWidth * 2) {
+        startTranslateX += trackBaseWidth;
+        currentTranslateX += trackBaseWidth;
+    } else if (currentTranslateX >= 0) {
+        startTranslateX -= trackBaseWidth;
+        currentTranslateX -= trackBaseWidth;
     }
+
+    track.style.transform = `translateX(${currentTranslateX}px)`;
 }, {passive: false});
 
 const endDrag = () => {
     if (!isDraggingTrack) return;
     isDraggingTrack = false;
-    if (track) track.style.transition = 'transform 0.5s var(--transition-curve)';
     
-    // Sync the index back after manual drag
-    const cards = document.querySelectorAll('.t-card');
-    if (cards.length > 0) {
-        const trackMax = track.scrollWidth - window.innerWidth;
-        const cardWidth = cards[0].offsetWidth;
-        const gap = parseFloat(window.getComputedStyle(track).gap) || 0;
-        const stepPixels = cardWidth + gap;
-        testimonialIndex = Math.round((currentPercent * trackMax) / stepPixels);
+    // Snap to nearest card
+    const card = document.querySelector('.t-card');
+    const gap = parseFloat(window.getComputedStyle(track).gap) || 0;
+    const step = card.offsetWidth + gap;
+    
+    const index = Math.round(currentTranslateX / step);
+    currentTranslateX = index * step;
+    
+    if (track) {
+        track.style.transition = 'transform 0.5s var(--transition-curve)';
+        track.style.transform = `translateX(${currentTranslateX}px)`;
     }
     
-    // Resume autoplay after a small delay
     setTimeout(startTestimonialAutoplay, 2000);
 };
 window.addEventListener('mouseup', endDrag);
@@ -401,6 +443,7 @@ window.addEventListener('touchend', endDrag);
 // --- INITIALIZE ON LOAD ---
 document.addEventListener('DOMContentLoaded', () => {
     initHeaderDrag(); // For standalone project pages
+    initInfiniteTestimonials(); // Setup infinite cloning
     startTestimonialAutoplay(); // Start testimonials autoplay
 });
 
