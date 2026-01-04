@@ -110,8 +110,9 @@ h1, h2, h3, h4, .logo {
     justify-content: center;
     align-items: center;
     text-align: center;
-    padding: 0 5%;
+    padding: 0 5%; 
     position: relative;
+    z-index: 5; 
 }
 
 .hero h1 {
@@ -137,15 +138,12 @@ h1, h2, h3, h4, .logo {
     overflow: hidden;
     margin-top: 2rem;
     position: relative;
-    z-index: 15; /* Higher than marquee or other relative elements */
+    z-index: 15;
 }
 
 .hero-img {
     width: 100%;
-    height: 120%; /* Taller than container for parallax headroom */
-    position: absolute;
-    top: -10%; /* Center it vertically */
-    left: 0;
+    height: 100%;
     object-fit: cover;
     transition: transform 2s var(--transition-curve);
 }
