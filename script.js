@@ -295,7 +295,7 @@ const counterObserver = new IntersectionObserver((entries) => {
 
 document.querySelectorAll('.counter').forEach(c => counterObserver.observe(c));
 
-// --- TESTIMONIALS DRAG & AUTOPLAY (INFINITE LOOP) ---
+// --- TESTIMONIALS DRAG & AUTOPLAY (INFINITE LOOP + MOMENTUM) ---
 
 const track = document.getElementById('testimonialTrack');
 const universe = document.querySelector('.testimonial-universe');
@@ -305,45 +305,46 @@ let testimonialAutoplayId = null;
 let currentTranslateX = 0;
 let trackBaseWidth = 0;
 
-// Initialize Infinite Loop
+let dragVelocity = 0;
+let lastDragX = 0;
+let lastDragTime = 0;
+let rafMomentum = null;
+
 const initInfiniteTestimonials = () => {
     if (!track) return;
     const cards = Array.from(track.children);
     if (cards.length === 0) return;
 
-    // Clone once to start
     const clone = track.innerHTML;
-    track.innerHTML = clone + clone + clone; // 3 Sets for safety
+    track.innerHTML = clone + clone + clone;
     
-    // Calculate width of one set
     const style = window.getComputedStyle(track);
     const gap = parseFloat(style.gap) || 0;
     trackBaseWidth = (cards[0].offsetWidth + gap) * cards.length;
     
-    // Start in the middle set
     currentTranslateX = -trackBaseWidth;
     track.style.transition = 'none';
     track.style.transform = `translateX(${currentTranslateX}px)`;
 };
 
-const updateTestimonialPos = (deltaX, useTransition = true) => {
+const updateTestimonialPos = (newX, useTransition = false) => {
     if (!track) return;
     
-    if (!useTransition) track.style.transition = 'none';
-    else track.style.transition = 'transform 0.5s var(--transition-curve)';
+    currentTranslateX = newX;
 
-    currentTranslateX += deltaX;
-    
-    // Seamless Jump logic
+    // Boundary Wrap
     if (currentTranslateX <= -trackBaseWidth * 2) {
         currentTranslateX += trackBaseWidth;
-        // Instant teleport
-        track.style.transition = 'none';
-    } else if (currentTranslateX >= 0) {
+    } else if (currentTranslateX >= -trackBaseWidth * 0.5) { // Adjusted for 3 sets
         currentTranslateX -= trackBaseWidth;
-        track.style.transition = 'none';
     }
 
+    if (useTransition) {
+        track.style.transition = 'transform 0.8s var(--transition-curve)';
+    } else {
+        track.style.transition = 'none';
+    }
+    
     track.style.transform = `translateX(${currentTranslateX}px)`;
 };
 
@@ -351,12 +352,10 @@ const startTestimonialAutoplay = () => {
     stopTestimonialAutoplay();
     testimonialAutoplayId = setInterval(() => {
         if (isDraggingTrack) return;
-
         const card = document.querySelector('.t-card');
         const gap = parseFloat(window.getComputedStyle(track).gap) || 0;
         const step = -(card.offsetWidth + gap);
-        
-        updateTestimonialPos(step);
+        updateTestimonialPos(currentTranslateX + step, true);
     }, 5000);
 };
 
@@ -373,11 +372,14 @@ let startTranslateX;
 if (universe) {
     const startTrackDrag = (e) => {
         stopTestimonialAutoplay();
+        cancelAnimationFrame(rafMomentum);
         isDraggingTrack = true;
         const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
         trackStartX = clientX;
         startTranslateX = currentTranslateX;
-        if (track) track.style.transition = 'none';
+        lastDragX = clientX;
+        lastDragTime = performance.now();
+        track.style.transition = 'none';
     };
     universe.addEventListener('mousedown', startTrackDrag);
     universe.addEventListener('touchstart', startTrackDrag, {passive: true});
@@ -386,56 +388,63 @@ if (universe) {
 window.addEventListener('mousemove', (e) => {
     if (!isDraggingTrack) return;
     const clientX = e.clientX;
+    const now = performance.now();
+    
+    // Calculate Velocity
+    const dt = now - lastDragTime;
+    const dx = clientX - lastDragX;
+    if (dt > 0) dragVelocity = dx / dt;
+    
     const walk = clientX - trackStartX;
-    currentTranslateX = startTranslateX + walk;
+    updateTestimonialPos(startTranslateX + walk, false);
     
-    // Loop during drag
-    if (currentTranslateX <= -trackBaseWidth * 2) {
-        startTranslateX += trackBaseWidth;
-        currentTranslateX += trackBaseWidth;
-    } else if (currentTranslateX >= 0) {
-        startTranslateX -= trackBaseWidth;
-        currentTranslateX -= trackBaseWidth;
-    }
-    
-    track.style.transform = `translateX(${currentTranslateX}px)`;
+    lastDragX = clientX;
+    lastDragTime = now;
 });
 
 window.addEventListener('touchmove', (e) => {
     if (!isDraggingTrack) return;
     const clientX = e.touches[0].clientX;
+    const now = performance.now();
+    const dt = now - lastDragTime;
+    const dx = clientX - lastDragX;
+    if (dt > 0) dragVelocity = dx / dt;
+    
     const walk = clientX - trackStartX;
-    currentTranslateX = startTranslateX + walk;
-
-    if (currentTranslateX <= -trackBaseWidth * 2) {
-        startTranslateX += trackBaseWidth;
-        currentTranslateX += trackBaseWidth;
-    } else if (currentTranslateX >= 0) {
-        startTranslateX -= trackBaseWidth;
-        currentTranslateX -= trackBaseWidth;
-    }
-
-    track.style.transform = `translateX(${currentTranslateX}px)`;
+    updateTestimonialPos(startTranslateX + walk, false);
+    
+    lastDragX = clientX;
+    lastDragTime = now;
 }, {passive: false});
 
-const endDrag = () => {
-    if (!isDraggingTrack) return;
-    isDraggingTrack = false;
-    
-    // Snap to nearest card
+const applyMomentum = () => {
+    if (Math.abs(dragVelocity) < 0.1) {
+        snapToCard();
+        return;
+    }
+
+    currentTranslateX += dragVelocity * 16;
+    dragVelocity *= 0.95; // Friction
+    updateTestimonialPos(currentTranslateX, false);
+    rafMomentum = requestAnimationFrame(applyMomentum);
+};
+
+const snapToCard = () => {
     const card = document.querySelector('.t-card');
     const gap = parseFloat(window.getComputedStyle(track).gap) || 0;
     const step = card.offsetWidth + gap;
     
     const index = Math.round(currentTranslateX / step);
-    currentTranslateX = index * step;
+    const targetX = index * step;
     
-    if (track) {
-        track.style.transition = 'transform 0.5s var(--transition-curve)';
-        track.style.transform = `translateX(${currentTranslateX}px)`;
-    }
-    
+    updateTestimonialPos(targetX, true);
     setTimeout(startTestimonialAutoplay, 2000);
+};
+
+const endDrag = () => {
+    if (!isDraggingTrack) return;
+    isDraggingTrack = false;
+    applyMomentum();
 };
 window.addEventListener('mouseup', endDrag);
 window.addEventListener('touchend', endDrag);
