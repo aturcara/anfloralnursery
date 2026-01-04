@@ -386,8 +386,7 @@ window.addEventListener('mousemove', (e) => {
     mouse.x = e.clientX;
     mouse.y = e.clientY;
     
-    cursorDot.style.opacity = '1';
-    cursorOutline.style.opacity = '1';
+    // Only show the biggest one on movement
     if (cursorOuterLine) cursorOuterLine.style.opacity = '1';
 });
 

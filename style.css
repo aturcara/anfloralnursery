@@ -374,45 +374,37 @@ a:hover, a:focus, a:active {
     position: fixed;
     top: 0;
     left: 0;
-    border-radius: 50%; /* Changed to circle */
+    border-radius: 50%;
     z-index: 10000;
     opacity: 0;
     mix-blend-mode: difference;
     transition: opacity 0.3s ease-in-out;
 }
 
-.cursor-dot {
-    width: 8px;
-    height: 8px;
-    background-color: var(--white);
-}
-
-.cursor-outline {
-    width: 40px;
-    height: 40px;
-    border: 1px solid var(--white);
-}
-
+/* Biggest one only by default */
 .cursor-outer-line {
     width: 100px;
     height: 100px;
-    border: 0.5px solid rgba(255, 255, 255, 0.5); /* Thinner and more subtle */
+    border: 0.5px solid rgba(255, 255, 255, 0.5);
+}
+
+/* Hide small ones by default */
+.cursor-dot, .cursor-outline {
+    display: none;
 }
 
 /* Hover State */
 body.hovering .cursor-outline {
+    display: block;
     width: 60px;
     height: 60px;
     background-color: var(--white);
     border-color: transparent;
-}
-
-body.hovering .cursor-dot {
-    transform: scale(0);
+    opacity: 1;
 }
 
 body.hovering .cursor-outer-line {
-    opacity: 0 !important; /* Force hide when hovering */
+    opacity: 0 !important;
 }
 
 @media (hover: none) and (pointer: coarse) {
