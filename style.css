@@ -27,6 +27,30 @@ h1, h2, h3, h4, .logo {
     font-weight: 600;
 }
 
+/* --- ANIMATED LOGO --- */
+.logo-leaf {
+    display: inline-block;
+    transform-origin: bottom center;
+    animation: leaf-sway 3s ease-in-out infinite;
+}
+
+@keyframes leaf-sway {
+    0% { transform: rotate(0deg); }
+    25% { transform: rotate(-10deg); }
+    75% { transform: rotate(10deg); }
+    100% { transform: rotate(0deg); }
+}
+
+.logo:hover .logo-leaf {
+    animation: leaf-shake 0.5s ease-in-out infinite;
+}
+
+@keyframes leaf-shake {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-20deg); }
+    75% { transform: rotate(20deg); }
+}
+
 /* --- ANIMATION ENGINE --- */
 .reveal-up {
     opacity: 0;
