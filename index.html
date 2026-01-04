@@ -268,7 +268,7 @@
 
         <div class="project-showcase">
             <!-- Featured Project (Large) -->
-            <div class="project-card large reveal-up" onclick="whatsAppOrder('Projek Villa Tropika')">
+            <div class="project-card large reveal-up" onclick="openProject('villa-tropika')">
                 <img src="https://placehold.co/1200x800/1a472a/FFF?text=Villa+Tropika+Langkawi" alt="Villa Project" class="project-img">
                 <div class="project-info">
                     <h3>Villa Tropika, Langkawi</h3>
@@ -278,7 +278,7 @@
 
             <div class="project-grid-split">
                 <!-- Project 2 -->
-                <div class="project-card small reveal-left" onclick="whatsAppOrder('Projek Vertical Garden KL')">
+                <div class="project-card small reveal-left" onclick="openProject('vertical-garden')">
                     <img src="https://placehold.co/600x600/27ae60/FFF?text=Vertical+Garden+KL" alt="Vertical Garden" class="project-img">
                     <div class="project-info">
                         <h3>Vertical Garden, KL</h3>
@@ -287,7 +287,7 @@
                 </div>
 
                 <!-- Project 3 -->
-                <div class="project-card small reveal-right" onclick="whatsAppOrder('Projek Zen Garden Ipoh')">
+                <div class="project-card small reveal-right" onclick="openProject('zen-garden')">
                     <img src="https://placehold.co/600x600/795548/FFF?text=Zen+Garden+Ipoh" alt="Zen Garden" class="project-img">
                     <div class="project-info">
                         <h3>Zen Garden, Ipoh</h3>
@@ -306,6 +306,58 @@
             <a href="https://wa.me/60134085923" class="btn-giant"><i class="fab fa-whatsapp"></i> WhatsApp Kami Sekarang</a>
         </div>
     </section>
+
+    <!-- Project Detail Overlay -->
+    <div id="projectDetailOverlay" class="project-detail-overlay">
+        <div class="detail-nav">
+            <button onclick="closeProject()" class="close-btn">
+                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none"><path d="M18 6L6 18M6 6l12 12"></path></svg>
+                <span>Back</span>
+            </button>
+            <div class="detail-logo">Anfloral.</div>
+        </div>
+
+        <div id="detailContent" class="detail-content">
+            <!-- Header: Kinetic Ribbon -->
+            <div class="kinetic-header">
+                <div class="ribbon-track" id="ribbonTrack">
+                    <!-- Images will be injected by JS -->
+                </div>
+            </div>
+
+            <!-- Big Title & Info -->
+            <div class="detail-hero">
+                <h1 id="detailTitle">Projek Name</h1>
+                <div class="hero-marquee">
+                    <div class="marquee-inner" id="heroMarquee">
+                        <span>RESIDENTIAL</span> • <span>MODERN TROPICAL</span> • <span>COMPLETED 2025</span> • <span>RESIDENTIAL</span> • <span>MODERN TROPICAL</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="detail-body container">
+                <div class="detail-grid">
+                    <div class="detail-text">
+                        <h3>The Brief</h3>
+                        <p id="detailDescription">Description goes here...</p>
+                    </div>
+                    <div class="detail-stats">
+                        <div class="stat-item">
+                            <span class="label">Duration</span>
+                            <span class="value" id="detailDuration">14 Days</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="label">Plants</span>
+                            <span class="value" id="detailPlants">40+ Species</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Transition Curtain -->
+    <div id="curtain" class="transition-curtain"></div>
 
     <!-- Floating WhatsApp Button -->
     <a href="https://wa.me/60134085923" class="floating-whatsapp" target="_blank" aria-label="Chat on WhatsApp">

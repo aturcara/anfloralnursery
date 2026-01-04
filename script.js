@@ -151,6 +151,75 @@ window.addEventListener('touchmove', (e) => {
 window.addEventListener('mouseup', onDragEnd);
 window.addEventListener('touchend', onDragEnd);
 
+// --- PROJECT DETAIL LOGIC ---
+const projectData = {
+    'villa-tropika': {
+        title: 'Villa Tropika',
+        description: 'Transformasi resort peribadi di Langkawi. Kami menggunakan kombinasi pokok kelapa eksotik dan lanskap lembut untuk mencipta suasana hutan hujan tropika yang menyejukkan. Setiap sudut dirancang untuk privasi dan ketenangan.',
+        duration: '21 Hari',
+        plants: '120+ Spesies',
+        color: '#1a472a'
+    },
+    'vertical-garden': {
+        title: 'Vertical Garden KL',
+        description: 'Dinding hijau vertikal di tengah pusat bandar Kuala Lumpur. Menggunakan sistem pengairan automatik untuk memastikan lumut dan tanaman sentiasa subur walaupun di dalam ruang tertutup pejabat korporat.',
+        duration: '7 Hari',
+        plants: '1500+ Tanaman',
+        color: '#27ae60'
+    },
+    'zen-garden': {
+        title: 'Zen Garden Ipoh',
+        description: 'Konsep minimalis Jepun yang menenangkan. Kami mengimport batuan sungai khas dan menggabungkan seni pasir (gravel) dengan pokok Juniperus Taiwan untuk mencipta ruang meditasi yang estetik.',
+        duration: '10 Hari',
+        plants: '15 Spesies',
+        color: '#795548'
+    }
+};
+
+function openProject(id) {
+    const data = projectData[id];
+    if (!data) return;
+
+    const curtain = document.getElementById('curtain');
+    const overlay = document.getElementById('projectDetailOverlay');
+    const ribbonTrack = document.getElementById('ribbonTrack');
+
+    // Reset and Set Content
+    document.getElementById('detailTitle').innerText = data.title;
+    document.getElementById('detailDescription').innerText = data.description;
+    document.getElementById('detailDuration').innerText = data.duration;
+    document.getElementById('detailPlants').innerText = data.plants;
+    curtain.style.background = data.color;
+
+    // Inject Images for Kinetic Ribbon
+    ribbonTrack.innerHTML = '';
+    for (let i = 1; i <= 8; i++) {
+        const img = document.createElement('img');
+        img.src = `https://placehold.co/600x800/${data.color.replace('#', '')}/FFF?text=${data.title}+${i}`;
+        ribbonTrack.appendChild(img);
+    }
+    // Duplicate for infinite loop
+    ribbonTrack.innerHTML += ribbonTrack.innerHTML;
+
+    // Trigger Transition
+    curtain.classList.add('active');
+    
+    setTimeout(() => {
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden'; // Stop scroll
+    }, 400);
+
+    setTimeout(() => {
+        curtain.classList.remove('active');
+    }, 1200);
+}
+
+function closeProject() {
+    const overlay = document.getElementById('projectDetailOverlay');
+    overlay.classList.remove('active');
+    document.body.style.overflow = 'auto'; // Enable scroll
+}
+
 // Parallax Effect for Hero Image (Optional Polish)
 const heroImg = document.querySelector('.hero-img');
 window.addEventListener('scroll', () => {
