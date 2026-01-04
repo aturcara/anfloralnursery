@@ -387,9 +387,6 @@ window.addEventListener('mousemove', (e) => {
     mouse.y = e.clientY;
 });
 
-let outlineAngle = 0;
-let outerLineAngle = 0;
-
 const animateCursor = () => {
     // 1. Dot Logic (Simple Lerp for precision)
     dot.x += (mouse.x - dot.x) * 0.4;
@@ -425,24 +422,20 @@ const animateCursor = () => {
 
     // Outline Visuals
     const speed = Math.hypot(outline.vx, outline.vy);
-    const targetAngle = speed > 0.5 ? Math.atan2(outline.vy, outline.vx) * 180 / Math.PI : 0;
     
-    // Smoothly transition angle back to 0 when stopped
-    outlineAngle += (targetAngle - outlineAngle) * 0.1;
+    // Fixed slanted tilt (e.g. 15deg) instead of dynamic spin
+    const fixedTilt = 15;
     
     const stretch = Math.min(speed / 20, 0.5);
     const outlineScale = isHovering ? 1.5 : 1;
-    cursorOutline.style.transform = `translate(${outline.x - 20}px, ${outline.y - 20}px) rotate(${outlineAngle}deg) scale(${outlineScale + stretch}, ${outlineScale - stretch})`;
+    cursorOutline.style.transform = `translate(${outline.x - 20}px, ${outline.y - 20}px) rotate(${fixedTilt}deg) scale(${outlineScale + stretch}, ${outlineScale - stretch})`;
 
-    // Outer Line Visuals
+    // Outer Line Visuals (Slower, heavy swing)
     if (cursorOuterLine) {
         const outerSpeed = Math.hypot(outerLine.vx, outerLine.vy);
-        const outerTargetAngle = outerSpeed > 0.5 ? Math.atan2(outerLine.vy, outerLine.vx) * 180 / Math.PI : 0;
-        
-        outerLineAngle += (outerTargetAngle - outerLineAngle) * 0.05;
-        
         const outerStretch = Math.min(outerSpeed / 40, 0.3);
-        cursorOuterLine.style.transform = `translate(${outerLine.x - 50}px, ${outerLine.y - 50}px) rotate(${outerLineAngle}deg) scale(${1 + outerStretch}, ${1 - outerStretch})`;
+        
+        cursorOuterLine.style.transform = `translate(${outerLine.x - 50}px, ${outerLine.y - 50}px) rotate(${fixedTilt}deg) scale(${1 + outerStretch}, ${1 - outerStretch})`;
     }
     
     requestAnimationFrame(animateCursor);
