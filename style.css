@@ -134,7 +134,7 @@ h1, h2, h3, h4, .logo {
     width: 100%;
     max-width: 1200px;
     height: 500px;
-    border-radius: 30px;
+    border-radius: 0;
     overflow: hidden;
     margin-top: 2rem;
     position: relative;
