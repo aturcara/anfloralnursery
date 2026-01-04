@@ -294,12 +294,24 @@ h2 {
     color: var(--dark-green);
 }
 
-.service-card .icon {
-    font-size: 3.5rem;
-    margin-bottom: 1.5rem;
-    color: var(--primary-green);
-    transition: color 0.4s;
+/* Images */
+.card-img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
+
+.service-card:hover .card-img {
+    transform: scale(1.02);
+    transition: transform 0.3s ease;
+}
+
+/* Old Icon Styles (Removed or kept minimal if needed) */
+/* .service-card .icon { ... } */
+/* .product-emoji { ... } */
 
 .service-card h3 {
     font-size: 1.5rem;
@@ -369,16 +381,7 @@ h2 {
     border-color: var(--primary-green);
 }
 
-.product-emoji {
-    font-size: 4.5rem;
-    margin-bottom: 1rem;
-    background-color: var(--light-mint);
-    width: 100px;
-    height: 100px;
-    line-height: 100px;
-    border-radius: 50%;
-    margin: 0 auto 1rem;
-}
+/* Product Emoji Removed */
 
 .product-card h4 {
     margin-bottom: 0.5rem;
