@@ -94,7 +94,7 @@ h1, h2, h3, h4, .logo {
     background-color: var(--dark-green);
     color: var(--white) !important;
     padding: 0.6rem 1.5rem;
-    border-radius: 50px;
+    border-radius: 0;
     transition: transform 0.3s;
 }
 
@@ -208,7 +208,7 @@ h1, h2, h3, h4, .logo {
     width: 100%;
     height: 500px;
     object-fit: cover;
-    border-radius: 20px;
+    border-radius: 0;
     box-shadow: 0 20px 40px rgba(0,0,0,0.1);
 }
 
@@ -326,7 +326,7 @@ h1, h2, h3, h4, .logo {
 .t-card {
     background: var(--sand);
     padding: 3rem;
-    border-radius: 30px;
+    border-radius: 0;
     width: 450px;
     height: 320px;
     display: flex;
@@ -379,7 +379,7 @@ h1, h2, h3, h4, .logo {
     width: 100%;
     height: 6px;
     background: #e0e0e0;
-    border-radius: 10px;
+    border-radius: 0;
     position: relative;
     cursor: pointer;
 }
@@ -390,7 +390,7 @@ h1, h2, h3, h4, .logo {
     top: 0;
     height: 100%;
     background: var(--primary-green);
-    border-radius: 10px;
+    border-radius: 0;
     width: 0%;
     transition: width 0.1s ease;
 }
@@ -404,7 +404,7 @@ h1, h2, h3, h4, .logo {
     height: 50px;
     background: var(--dark-green);
     color: var(--white);
-    border-radius: 50% 50% 50% 0; /* Leaf-like shape */
+    border-radius: 0;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -471,7 +471,7 @@ h1, h2, h3, h4, .logo {
 
 .card-image-wrapper {
     overflow: hidden;
-    border-radius: 15px;
+    border-radius: 0;
     margin-bottom: 1.5rem;
     position: relative;
     aspect-ratio: 1/1; /* Square */
@@ -525,7 +525,7 @@ h1, h2, h3, h4, .logo {
 
 .project-card {
     position: relative;
-    border-radius: 20px;
+    border-radius: 0;
     overflow: hidden;
     cursor: pointer;
 }
@@ -598,7 +598,7 @@ h1, h2, h3, h4, .logo {
     width: 600px;
     height: 600px;
     background: rgba(255,255,255,0.05);
-    border-radius: 50%;
+    border-radius: 0;
     animation: pulse-ring 10s infinite;
 }
 
@@ -620,7 +620,7 @@ h1, h2, h3, h4, .logo {
     padding: 1.2rem 3rem;
     font-size: 1.2rem;
     font-weight: 800;
-    border-radius: 50px;
+    border-radius: 0;
     text-transform: uppercase;
     display: inline-block;
     transition: transform 0.3s, box-shadow 0.3s;
@@ -642,7 +642,7 @@ h1, h2, h3, h4, .logo {
     height: 60px;
     background-color: #25d366;
     color: white;
-    border-radius: 50%;
+    border-radius: 0;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -704,7 +704,7 @@ footer {
 .card-expander {
     position: fixed;
     z-index: 10000;
-    border-radius: 20px;
+    border-radius: 0;
     pointer-events: none;
     transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
     overflow: hidden;
@@ -808,7 +808,7 @@ footer {
     justify-content: center;
     width: 50px;
     height: 50px;
-    border-radius: 50%;
+    border-radius: 0;
     cursor: pointer;
     color: var(--text-main);
     transition: all 0.3s var(--transition-curve);

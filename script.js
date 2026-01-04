@@ -227,7 +227,7 @@ function closeProject(isBackAction = false) {
             shrinker.style.left = `${rect.left}px`;
             shrinker.style.width = `${rect.width}px`;
             shrinker.style.height = `${rect.height}px`;
-            shrinker.style.borderRadius = '20px';
+            shrinker.style.borderRadius = '0';
             shrinker.classList.remove('expanding');
         });
 
