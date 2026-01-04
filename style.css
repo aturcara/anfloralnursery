@@ -373,35 +373,35 @@ a:hover, a:focus, a:active {
     position: fixed;
     top: 0;
     left: 0;
-    border-radius: 0; /* Keeping with your square theme */
+    border-radius: 0;
     z-index: 10000;
     opacity: 0;
-    transition: opacity 0.3s ease-in-out, transform 0.3s ease-out;
+    mix-blend-mode: difference; /* Magic inversion logic */
+    transition: opacity 0.3s ease-in-out; /* Removed transform transition to let JS handle physics smoothly */
 }
 
 .cursor-dot {
     width: 8px;
     height: 8px;
-    background-color: var(--dark-green);
+    background-color: var(--white); /* White for difference mode */
 }
 
 .cursor-outline {
     width: 40px;
     height: 40px;
-    border: 1px solid var(--dark-green);
-    /* The physics happen in JS via transform */
+    border: 1px solid var(--white);
 }
 
 /* Hover State */
 body.hovering .cursor-outline {
     width: 60px;
     height: 60px;
-    background-color: rgba(26, 71, 42, 0.1);
+    background-color: var(--white); /* Solid white in difference = fully inverted area */
     border-color: transparent;
 }
 
 body.hovering .cursor-dot {
-    transform: scale(2);
+    transform: scale(0); /* Hide dot on hover for cleaner look */
 }
 
 @media (hover: none) and (pointer: coarse) {

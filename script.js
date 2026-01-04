@@ -394,18 +394,18 @@ window.addEventListener('mousemove', (e) => {
 
 const animateCursor = () => {
     // Physics: Linear Interpolation (Lerp)
-    // Formula: current = current + (target - current) * factor
-    
-    // Dot follows fast (almost instant)
     dotX += (mouseX - dotX) * 0.3;
     dotY += (mouseY - dotY) * 0.3;
     
-    // Outline follows with heavy lag (physics feel)
     outlineX += (mouseX - outlineX) * 0.15;
     outlineY += (mouseY - outlineY) * 0.15;
     
-    cursorDot.style.transform = `translate(${dotX - 4}px, ${dotY - 4}px)`;
-    cursorOutline.style.transform = `translate(${outlineX - 20}px, ${outlineY - 20}px)`;
+    const isHovering = document.body.classList.contains('hovering');
+    const dotScale = isHovering ? 0 : 1;
+    const outlineScale = isHovering ? 1.5 : 1;
+
+    cursorDot.style.transform = `translate(${dotX - 4}px, ${dotY - 4}px) scale(${dotScale})`;
+    cursorOutline.style.transform = `translate(${outlineX - 20}px, ${outlineY - 20}px) scale(${outlineScale})`;
     
     requestAnimationFrame(animateCursor);
 };
