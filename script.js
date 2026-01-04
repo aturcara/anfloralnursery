@@ -185,6 +185,9 @@ function openProject(id, el) {
     const detailContent = document.getElementById('detailContent');
     const detailNav = document.querySelector('.detail-nav');
 
+    // Update URL without reload
+    history.pushState({ projectId: id }, '', `${id}.html`);
+
     // 1. Calculate Rect of Clicked Element
     const rect = el.getBoundingClientRect();
 
@@ -213,7 +216,6 @@ function openProject(id, el) {
     ribbonTrack.innerHTML += ribbonTrack.innerHTML;
 
     // 4. Execute Expansion Animation
-    // Trigger reflow to ensure initial state is caught
     expander.offsetHeight; 
     expander.classList.add('expanding');
 
@@ -222,7 +224,7 @@ function openProject(id, el) {
         detailContent.classList.add('visible');
         detailNav.classList.add('visible');
         document.body.style.overflow = 'hidden';
-    }, 600); // Expanding duration is 0.8s, show content slightly before finish
+    }, 600);
 
     setTimeout(() => {
         expander.style.opacity = '0';
@@ -230,7 +232,7 @@ function openProject(id, el) {
     }, 1000);
 }
 
-function closeProject() {
+function closeProject(isBackAction = false) {
     const overlay = document.getElementById('projectDetailOverlay');
     const detailContent = document.getElementById('detailContent');
     const detailNav = document.querySelector('.detail-nav');
@@ -241,8 +243,23 @@ function closeProject() {
     setTimeout(() => {
         overlay.classList.remove('active');
         document.body.style.overflow = 'auto';
+        
+        // If the user clicked the 'X' button (not the browser back button)
+        if (!isBackAction) {
+            history.pushState(null, '', 'index.html');
+        }
     }, 400);
 }
+
+// Listen for Browser Back Button
+window.addEventListener('popstate', (e) => {
+    // If we're going back to main page (no state)
+    if (!e.state || !e.state.projectId) {
+        closeProject(true);
+    }
+});
+
+// Parallax Effect for Hero Image (Optional Polish)
 
 // Parallax Effect for Hero Image (Optional Polish)
 const heroImg = document.querySelector('.hero-img');
