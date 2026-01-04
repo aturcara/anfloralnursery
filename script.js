@@ -37,26 +37,58 @@ function whatsAppOrder(item) {
     window.open(finalUrl, '_blank');
 }
 
-// Global state for project header dragging
+// Global state for project header dragging & autoplay
 let isHeaderDragging = false;
 let headerStartX;
 let headerInitialX = 0;
+let headerCurrentX = 0;
+let autoplayDirection = -1; // -1 for left, 1 for right
+let autoplaySpeed = 0.8; 
+let autoplayId = null;
+
+function animateHeader() {
+    const ribbonTrack = document.getElementById('ribbonTrack');
+    if (!ribbonTrack || isHeaderDragging) {
+        autoplayId = requestAnimationFrame(animateHeader);
+        return;
+    }
+
+    const maxScroll = ribbonTrack.scrollWidth - window.innerWidth;
+    if (maxScroll <= 0) {
+        autoplayId = requestAnimationFrame(animateHeader);
+        return;
+    }
+
+    headerCurrentX += (autoplaySpeed * autoplayDirection);
+
+    // Boundary check & reverse
+    if (headerCurrentX <= -maxScroll) {
+        headerCurrentX = -maxScroll;
+        autoplayDirection = 1;
+    } else if (headerCurrentX >= 0) {
+        headerCurrentX = 0;
+        autoplayDirection = -1;
+    }
+
+    ribbonTrack.style.transform = `translateX(${headerCurrentX}px)`;
+    autoplayId = requestAnimationFrame(animateHeader);
+}
 
 function initHeaderDrag() {
     const headerContainer = document.querySelector('.kinetic-header');
     const ribbonTrack = document.getElementById('ribbonTrack');
     if (!headerContainer || !ribbonTrack) return;
 
+    // Start/Stop animation
+    if (!autoplayId) animateHeader();
+
     const startHeaderDrag = (e) => {
         isHeaderDragging = true;
         const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
         headerStartX = clientX;
         
-        // Robust way to get current X translation
-        const style = window.getComputedStyle(ribbonTrack);
-        const matrix = new WebKitCSSMatrix(style.transform);
-        headerInitialX = matrix.m41;
-        
+        // Sync InitialX with CurrentX from autoplay
+        headerInitialX = headerCurrentX;
         ribbonTrack.style.transition = 'none';
     };
 
@@ -70,6 +102,7 @@ function initHeaderDrag() {
         if (newX > 0) newX = 0;
         if (newX < -maxScroll) newX = -maxScroll;
         
+        headerCurrentX = newX; // Update the shared current position
         ribbonTrack.style.transform = `translateX(${newX}px)`;
     };
 
@@ -79,16 +112,12 @@ function initHeaderDrag() {
         ribbonTrack.style.transition = 'transform 0.6s cubic-bezier(0.22, 1, 0.36, 1)';
     };
 
-    // Remove existing to avoid duplicates if re-initted
-    headerContainer.removeEventListener('mousedown', startHeaderDrag);
     headerContainer.addEventListener('mousedown', startHeaderDrag);
     headerContainer.addEventListener('touchstart', startHeaderDrag, {passive: true});
     
-    window.removeEventListener('mousemove', moveHeaderDrag);
     window.addEventListener('mousemove', moveHeaderDrag);
     window.addEventListener('touchmove', moveHeaderDrag, {passive: false});
     
-    window.removeEventListener('mouseup', stopHeaderDrag);
     window.addEventListener('mouseup', stopHeaderDrag);
     window.addEventListener('touchend', stopHeaderDrag);
 }
@@ -134,6 +163,10 @@ function openProject(id, el) {
         img.src = `https://placehold.co/1200x800/${data.color.replace('#', '')}/FFF?text=${themes[i % themes.length]}+${i+1}`;
         ribbonTrack.appendChild(img);
     }
+    
+    // Reset positions for new project
+    headerCurrentX = 0;
+    autoplayDirection = -1;
     ribbonTrack.style.transform = 'translateX(0)';
 
     requestAnimationFrame(() => expander.classList.add('expanding'));
@@ -144,7 +177,7 @@ function openProject(id, el) {
         detailContent.classList.add('visible');
         detailNav.classList.add('visible');
         document.body.style.overflow = 'hidden';
-        initHeaderDrag(); // Initialize drag after overlay is visible
+        initHeaderDrag(); 
     }, 600);
 
     setTimeout(() => {
