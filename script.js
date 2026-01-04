@@ -68,6 +68,56 @@ counters.forEach(counter => {
     counterObserver.observe(counter);
 });
 
+// --- TESTIMONIALS V2: DRAG DIAL & TRACK ---
+const track = document.getElementById('testimonialTrack');
+const dial = document.getElementById('dialWrapper');
+let isDown = false;
+let startX;
+let scrollLeft;
+let rotation = 0;
+
+// Dial Drag Logic
+dial.addEventListener('mousedown', (e) => {
+    isDown = true;
+    startX = e.pageX - dial.offsetLeft;
+});
+
+window.addEventListener('mouseup', () => {
+    isDown = false;
+});
+
+window.addEventListener('mousemove', (e) => {
+    if (!isDown) return;
+    e.preventDefault();
+    const x = e.pageX - dial.offsetLeft;
+    const walk = (x - startX) * 2; // Speed multiplier
+    
+    rotation += walk * 0.5;
+    dial.style.transform = `rotate(${rotation}deg)`;
+    
+    // Move track based on rotation
+    const trackMax = track.scrollWidth - window.innerWidth;
+    const scrollPos = (rotation % 360) / 360 * trackMax;
+    track.style.transform = `translateX(${-Math.abs(scrollPos)}px)`;
+});
+
+// Touch support
+dial.addEventListener('touchstart', (e) => {
+    isDown = true;
+    startX = e.touches[0].pageX - dial.offsetLeft;
+});
+window.addEventListener('touchend', () => isDown = false);
+window.addEventListener('touchmove', (e) => {
+    if (!isDown) return;
+    const x = e.touches[0].pageX - dial.offsetLeft;
+    const walk = (x - startX) * 2;
+    rotation += walk * 0.5;
+    dial.style.transform = `rotate(${rotation}deg)`;
+    const trackMax = track.scrollWidth - window.innerWidth;
+    const scrollPos = (rotation % 360) / 360 * trackMax;
+    track.style.transform = `translateX(${-Math.abs(scrollPos)}px)`;
+});
+
 // Parallax Effect for Hero Image (Optional Polish)
 const heroImg = document.querySelector('.hero-img');
 window.addEventListener('scroll', () => {

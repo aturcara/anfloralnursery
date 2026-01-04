@@ -305,65 +305,126 @@ h1, h2, h3, h4, .logo {
     margin-top: 50px;
 }
 
-/* --- TESTIMONIALS SECTION --- */
-.testimonials-section {
-    padding: 8rem 5%;
-    background-color: #fff;
-}
-
-.testimonial-slider {
-    display: flex;
-    gap: 2rem;
-    justify-content: center;
-    flex-wrap: wrap;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-.testimonial-card {
-    background-color: var(--sand);
-    padding: 3rem;
-    border-radius: 20px;
-    flex: 1;
-    min-width: 300px;
-    max-width: 400px;
+/* --- TESTIMONIALS V2: UNIVERSE & DIAL --- */
+.testimonials-v2 {
+    background-color: var(--white);
+    padding: 10rem 0;
+    overflow: hidden;
     position: relative;
 }
 
-.testimonial-card::before {
-    content: '“';
-    font-size: 5rem;
-    color: var(--primary-green);
-    position: absolute;
-    top: 10px;
-    left: 20px;
-    opacity: 0.2;
-    font-family: serif;
+.testimonial-universe {
+    width: 100%;
+    margin: 5rem 0;
+    cursor: grab;
+    user-select: none;
 }
 
-.quote {
+.testimonial-universe:active {
+    cursor: grabbing;
+}
+
+.testimonial-track {
+    display: flex;
+    gap: 3rem;
+    padding: 0 5%;
+    width: max-content;
+    will-change: transform;
+}
+
+.t-card {
+    background: var(--sand);
+    padding: 3rem;
+    border-radius: 30px;
+    width: 450px;
+    height: 320px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.8s var(--transition-curve);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.03);
+    border: 1px solid rgba(0,0,0,0.05);
+}
+
+.t-card p {
+    font-size: 1.4rem;
+    line-height: 1.4;
+    color: var(--dark-green);
+    font-family: 'Fredoka', sans-serif;
+}
+
+.t-author {
+    font-weight: 700;
     font-size: 1.1rem;
-    font-style: italic;
-    margin-bottom: 2rem;
     color: var(--text-main);
 }
 
-.client-info strong {
+.t-author span {
     display: block;
-    color: var(--dark-green);
-}
-
-.client-info span {
+    font-weight: 400;
     font-size: 0.9rem;
     color: var(--text-light);
 }
 
-/* Mobile Tweaks for New Sections */
+/* THE DIAL */
+.dial-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 4rem;
+}
+
+.dial-wrapper {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: var(--white);
+    border: 2px solid var(--dark-green);
+    position: relative;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.1s linear;
+}
+
+.dial-ring {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    border: 1px dashed var(--dark-green);
+    position: absolute;
+    animation: rotate 20s linear infinite;
+}
+
+.dial-indicator {
+    width: 15px;
+    height: 15px;
+    background: var(--primary-green);
+    border-radius: 50%;
+    position: absolute;
+    top: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.dial-label {
+    font-family: 'Fredoka', sans-serif;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--dark-green);
+    font-weight: 700;
+}
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Mobile Adjustments */
 @media screen and (max-width: 768px) {
-    .trust-grid { grid-template-columns: 1fr; gap: 3rem; }
-    .process-steps { flex-direction: column; align-items: center; gap: 3rem; }
-    .step-line { display: none; } /* Hide lines on mobile */
-    .testimonial-slider { flex-direction: column; align-items: center; }
+    .t-card { width: 300px; height: 350px; padding: 2rem; }
+    .t-card p { font-size: 1.1rem; }
 }
 
 /* --- PRODUCT/SERVICE CARDS --- */
