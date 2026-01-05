@@ -99,6 +99,7 @@ a:hover, a:focus, a:active {
     font-size: 1.5rem;
     color: var(--dark-green);
     letter-spacing: -0.5px;
+    display: inline-block;
 }
 
 .nav-links {

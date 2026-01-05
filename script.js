@@ -578,6 +578,12 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     }
+
+    // Dynamic Year
+    const yearSpan = document.getElementById('currentYear');
+    if (yearSpan) {
+        yearSpan.innerText = new Date().getFullYear();
+    }
 });
 
 // --- PARALLAX ---
