@@ -163,11 +163,17 @@ function openProject(id, el) {
     document.getElementById('detailPlants').innerText = data.plants;
     heroMarquee.innerHTML = `<span>${data.subtitle}</span> • <span>${data.subtitle}</span> • <span>${data.subtitle}</span>`;
 
-    ribbonTrack.innerHTML = '';
-    const themes = ['nature', 'garden', 'plants', 'landscape', 'architecture'];
+    const ribbonImages = {
+        'villa-tropika': ['1512917774080-9991f1c4c750', '1582268611958-ebfd161ef9cf', '1584132905271-8927dd5c74fe', '1613490493576-7fde63acd811', '1564013799919-ab600027ffc6'],
+        'vertical-garden': ['1534349762230-e0cadf78f5db', '1591857177580-dc82b9ac4e1e', '1446064448000-d63a7945965b', '1533038590840-1cde6e66b056', '1603511021144-fed96d24600a'],
+        'zen-garden': ['1505312017300-366532e3a6c9', '1504198453319-5ce5815fd3bf', '1553356084-58ef4a67b2ad', '1536431311719-398b6704d4cc', '1507568548784-7484a26811d7']
+    };
+
+    const imgIds = ribbonImages[id] || ['1585320806297-9794b3e4eeae'];
     for (let i = 0; i < 6; i++) {
         const img = document.createElement('img');
-        img.src = `https://placehold.co/1200x800/${data.color.replace('#', '')}/FFF?text=${themes[i % themes.length]}+${i+1}`;
+        const imgId = imgIds[i % imgIds.length];
+        img.src = `https://images.unsplash.com/photo-${imgId}?auto=format&fit=crop&q=80&w=1200`;
         ribbonTrack.appendChild(img);
     }
     
@@ -271,29 +277,41 @@ const observer = new IntersectionObserver((entries) => {
 
 document.querySelectorAll('.reveal-up, .reveal-left, .reveal-right, .reveal-scale, .marquee').forEach(el => observer.observe(el));
 
+// Trust Counter Staggered Animation
+const trustSection = document.querySelector('.trust-section');
+const counters = document.querySelectorAll('.counter');
+
 const counterObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
-            const counter = entry.target;
-            const target = +counter.getAttribute('data-target');
-            let current = 0;
-            const increment = target / 120;
-            const update = () => {
-                current += increment;
-                if (current < target) {
-                    counter.innerText = Math.ceil(current);
-                    requestAnimationFrame(update);
-                } else {
-                    counter.innerText = target;
-                }
-            };
-            update();
-            counterObserver.unobserve(counter);
+            counters.forEach((counter, index) => {
+                const target = +counter.getAttribute('data-target');
+                const duration = 1200; // 1.2 seconds total per counter
+                const delay = index * 300; // 0.3s stagger
+                
+                setTimeout(() => {
+                    let startTime = null;
+                    const animate = (currentTime) => {
+                        if (!startTime) startTime = currentTime;
+                        const progress = Math.min((currentTime - startTime) / duration, 1);
+                        const currentVal = Math.floor(progress * target);
+                        counter.innerText = currentVal;
+                        
+                        if (progress < 1) {
+                            requestAnimationFrame(animate);
+                        } else {
+                            counter.innerText = target;
+                        }
+                    };
+                    requestAnimationFrame(animate);
+                }, delay);
+            });
+            counterObserver.unobserve(entry.target);
         }
     });
 }, { threshold: 0.5 });
 
-document.querySelectorAll('.counter').forEach(c => counterObserver.observe(c));
+if (trustSection) counterObserver.observe(trustSection);
 
 // --- TESTIMONIALS DRAG & AUTOPLAY (INFINITE LOOP + MOMENTUM) ---
 
@@ -501,6 +519,16 @@ const endDrag = () => {
 };
 window.addEventListener('mouseup', endDrag);
 window.addEventListener('touchend', endDrag);
+
+function handleImageError(img) {
+    const greens = ['#2ecc71', '#1a472a', '#2e7d32'];
+    const randomGreen = greens[Math.floor(Math.random() * greens.length)];
+    img.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"; // Transparent pixel
+    img.style.backgroundColor = randomGreen;
+    img.style.display = 'block';
+    // If it's a project image or card image, ensure it still fills space
+    img.style.minHeight = '100%';
+}
 
 // --- INITIALIZE ON LOAD ---
 document.addEventListener('DOMContentLoaded', () => {

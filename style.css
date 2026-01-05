@@ -343,7 +343,7 @@ a:hover, a:focus, a:active {
     position: absolute;
     width: 18px;
     height: 18px;
-    color: var(--primary-green);
+    color: #ffd700;
     opacity: 0;
     transform: scale(0);
 }
@@ -359,7 +359,7 @@ a:hover, a:focus, a:active {
 
 @keyframes squeaky-clean {
     0%, 10%, 100% { transform: scale(0) rotate(0deg); opacity: 0; }
-    15% { transform: scale(1.2) rotate(90deg); opacity: 1; filter: drop-shadow(0 0 5px var(--primary-green)); }
+    15% { transform: scale(1.2) rotate(90deg); opacity: 1; filter: drop-shadow(0 0 5px #ffd700); }
     20% { transform: scale(1) rotate(180deg); opacity: 1; }
     30% { transform: scale(0) rotate(270deg); opacity: 0; }
 }
@@ -458,6 +458,10 @@ a:hover, a:focus, a:active {
     object-fit: cover;
     border-radius: 0;
     box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+}
+
+.flip-horizontal {
+    transform: scaleX(-1);
 }
 
 .swap-order .editorial-img {
