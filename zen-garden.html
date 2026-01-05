@@ -6,6 +6,16 @@
     <title>Zen Garden Ipoh | Anfloral Nursery</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;600&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <script>
+        function handleImageError(img) {
+            const greens = ['#2ecc71', '#1a472a', '#2e7d32'];
+            const randomGreen = greens[Math.floor(Math.random() * greens.length)];
+            img.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+            img.style.backgroundColor = randomGreen;
+            img.style.display = 'block';
+            img.style.minHeight = '100%';
+        }
+    </script>
 </head>
 <body style="background: var(--sand);">
     <div class="project-detail-overlay active" style="opacity: 1;">
@@ -18,7 +28,7 @@
         <div class="detail-content visible" style="opacity: 1; transform: none;">
             <div class="kinetic-header">
                 <div class="ribbon-track" id="ribbonTrack">
-                    <img src="https://images.unsplash.com/photo-1505312017300-366532e3a6c9?auto=format&fit=crop&q=80&w=1200" onerror="handleImageError(this)">
+                    <img src="https://images.unsplash.com/photo-1761971976407-db2374e4ae12?auto=format&fit=crop&q=80&w=1200" onerror="handleImageError(this)">
                     <img src="https://images.unsplash.com/photo-1504198453319-5ce5815fd3bf?auto=format&fit=crop&q=80&w=1200" onerror="handleImageError(this)">
                     <img src="https://images.unsplash.com/photo-1553356084-58ef4a67b2ad?auto=format&fit=crop&q=80&w=1200" onerror="handleImageError(this)">
                 </div>

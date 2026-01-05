@@ -520,16 +520,6 @@ const endDrag = () => {
 window.addEventListener('mouseup', endDrag);
 window.addEventListener('touchend', endDrag);
 
-function handleImageError(img) {
-    const greens = ['#2ecc71', '#1a472a', '#2e7d32'];
-    const randomGreen = greens[Math.floor(Math.random() * greens.length)];
-    img.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"; // Transparent pixel
-    img.style.backgroundColor = randomGreen;
-    img.style.display = 'block';
-    // If it's a project image or card image, ensure it still fills space
-    img.style.minHeight = '100%';
-}
-
 // --- INITIALIZE ON LOAD ---
 document.addEventListener('DOMContentLoaded', () => {
     initHeaderDrag(); // For standalone project pages

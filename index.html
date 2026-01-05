@@ -8,6 +8,16 @@
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;600&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script>
+        function handleImageError(img) {
+            const greens = ['#2ecc71', '#1a472a', '#2e7d32'];
+            const randomGreen = greens[Math.floor(Math.random() * greens.length)];
+            img.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+            img.style.backgroundColor = randomGreen;
+            img.style.display = 'block';
+            img.style.minHeight = '100%';
+        }
+    </script>
 </head>
 <body>
 
