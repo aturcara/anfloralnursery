@@ -8,6 +8,7 @@
     --primary-green: #2ecc71;
     --dark-green: #1a472a;
     --forest-green: #2e7d32;
+    --yellow: #ffd700;
     --sand: #fdfbf7; /* Shoprooof-like warm background */
     --text-main: #1d1d1d;
     --text-light: #666;
@@ -343,7 +344,7 @@ a:hover, a:focus, a:active {
     position: absolute;
     width: 18px;
     height: 18px;
-    color: #ffd700;
+    color: var(--yellow);
     opacity: 0;
     transform: scale(0);
 }
@@ -359,7 +360,7 @@ a:hover, a:focus, a:active {
 
 @keyframes squeaky-clean {
     0%, 10%, 100% { transform: scale(0) rotate(0deg); opacity: 0; }
-    15% { transform: scale(1.2) rotate(90deg); opacity: 1; filter: drop-shadow(0 0 5px #ffd700); }
+    15% { transform: scale(1.2) rotate(90deg); opacity: 1; filter: drop-shadow(0 0 5px var(--yellow)); }
     20% { transform: scale(1) rotate(180deg); opacity: 1; }
     30% { transform: scale(0) rotate(270deg); opacity: 0; }
 }
@@ -377,7 +378,6 @@ a:hover, a:focus, a:active {
     height: 500px;
     border-radius: 0;
     overflow: hidden;
-    margin-top: 2rem;
     position: relative;
     z-index: 15;
 }
@@ -389,24 +389,58 @@ a:hover, a:focus, a:active {
     transition: transform 2s var(--transition-curve);
 }
 /* --- MARQUEE BANNER --- */
-.marquee {
+.marquee-wrapper {
+    position: relative;
+    padding: 6rem 0;
+    margin-top: -4rem;
+    margin-bottom: 2rem;
+    overflow: hidden;
+    z-index: 20; /* Ensure it's above hero content */
+}
+
+.marquee, .marquee-reverse {
     background: var(--dark-green);
     color: var(--white);
     padding: 1.2rem 0;
     overflow: hidden;
     white-space: nowrap;
-    position: relative;
-    transform: rotate(-3deg) translateY(40px);
-    opacity: 0;
-    width: 120%;
-    margin: 4rem -10%;
+    position: absolute;
+    width: 140%;
+    left: -20%;
     z-index: 1;
-    transition: transform 1s var(--transition-curve), opacity 1s ease;
+    opacity: 0;
+}
+
+.marquee {
+    top: 50%;
+    margin-top: -1.5rem; /* half of total height approx */
+    z-index: 1; /* Back layer */
+    background: var(--dark-green);
+    transform: rotate(-3deg) translateX(500px);
+    transition: transform 1.5s cubic-bezier(0.22, 1, 0.36, 1), opacity 1s ease;
+    transition-delay: 0.6s;
+}
+
+.marquee-reverse {
+    top: 50%;
+    margin-top: -1.5rem;
+    z-index: 2; /* Front layer */
+    background: var(--forest-green);
+    transform: rotate(3deg) translateX(-500px);
+    transition: transform 1.5s cubic-bezier(0.22, 1, 0.36, 1), opacity 1s ease;
+    transition-delay: 0.8s;
+}
+
+.marquee.is-visible, .marquee-reverse.is-visible {
+    opacity: 1 !important;
 }
 
 .marquee.is-visible {
-    transform: rotate(-3deg) translateY(0) !important;
-    opacity: 1 !important;
+    transform: rotate(-3deg) translateX(0) !important;
+}
+
+.marquee-reverse.is-visible {
+    transform: rotate(3deg) translateX(0) !important;
 }
 
 .marquee-content {
@@ -416,6 +450,11 @@ a:hover, a:focus, a:active {
     font-size: 1.2rem;
     text-transform: uppercase;
     align-items: center;
+}
+
+.marquee-reverse .marquee-content {
+    animation-direction: reverse;
+    animation-duration: 25s;
 }
 
 .marquee-content span {
@@ -947,7 +986,7 @@ a:hover, a:focus, a:active {
 }
 
 .btn-giant {
-    background-color: var(--white);
+    background-color: var(--yellow);
     color: var(--dark-green);
     padding: 1.2rem 3rem;
     font-size: 1.2rem;
@@ -955,14 +994,20 @@ a:hover, a:focus, a:active {
     border-radius: 0;
     text-transform: uppercase;
     display: inline-block;
-    transition: transform 0.3s, box-shadow 0.3s;
+    transition: all 0.5s var(--transition-curve);
     box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    animation: cta-pulse 2s infinite ease-in-out;
+}
+
+@keyframes cta-pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
 }
 
 .btn-giant:hover {
-    transform: scale(1.05) translateY(-5px);
-    box-shadow: 0 15px 30px rgba(0,0,0,0.3);
-    color: var(--primary-green);
+    animation: none;
+    transform: scale(1.1);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
 }
 
 /* --- FLOATING WHATSAPP BUTTON --- */
@@ -972,7 +1017,7 @@ a:hover, a:focus, a:active {
     left: 0;
     width: 100px;
     height: 100px;
-    background-color: #25d366;
+    background-color: var(--dark-green);
     color: white;
     display: flex;
     align-items: flex-end;
@@ -985,7 +1030,7 @@ a:hover, a:focus, a:active {
 }
 
 .floating-whatsapp:hover {
-    background-color: var(--dark-green);
+    background-color: #25d366;
     transform: scale(1.05);
 }
 
@@ -1318,6 +1363,8 @@ footer {
     .cta-nav { display: none; }
     .logo { font-size: 1.25rem; }
 
+    .floating-whatsapp { display: none; }
+
     /* Hero Mobile */
     .hero { min-height: 70vh; padding-top: 4rem; }
     .hero h1 { font-size: 2.8rem; margin-bottom: 1.5rem; }
@@ -1344,6 +1391,15 @@ footer {
     .testimonials-v2 { padding: 5rem 0; }
     .t-card { width: 280px; height: 350px; padding: 1.5rem; }
     .t-card p { font-size: 1.2rem; }
+
+    /* Marquee Mobile */
+    .marquee-wrapper { margin-top: -4rem; margin-bottom: 2rem; padding: 4rem 0; }
+    .marquee, .marquee-reverse { width: 160%; left: -30%; padding: 0.1rem 0; }
+    .marquee { transform: rotate(-2deg) translateX(200px); }
+    .marquee-reverse { transform: rotate(2deg) translateX(-200px); }
+    .marquee.is-visible { transform: rotate(-6deg) translateX(0) !important; }
+    .marquee-reverse.is-visible { transform: rotate(6deg) translateX(0) !important; }
+    .marquee-content { font-size: 0.9rem; }
 
     /* CTA & Footer Mobile */
     .cta-statement { padding: 5rem 5%; }
