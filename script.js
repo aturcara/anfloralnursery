@@ -520,7 +520,8 @@ document.addEventListener('DOMContentLoaded', () => {
             document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : 'auto';
         });
 
-        mobileLinks.forEach(link => {
+        const allMobileLinks = document.querySelectorAll('.mobile-nav-links a, .btn-fancy-mobile');
+        allMobileLinks.forEach(link => {
             link.addEventListener('click', () => {
                 menuToggle.classList.remove('active');
                 mobileMenu.classList.remove('active');
