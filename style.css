@@ -396,29 +396,32 @@ a:hover, a:focus, a:active {
     overflow: hidden;
     white-space: nowrap;
     position: relative;
-    transform: rotate(-1.5deg) translateY(40px);
+    transform: rotate(-3deg) translateY(40px);
     opacity: 0;
-    width: 110%;
-    margin: 3rem -5%;
+    width: 120%;
+    margin: 4rem -10%;
     z-index: 1;
     transition: transform 1s var(--transition-curve), opacity 1s ease;
 }
 
 .marquee.is-visible {
-    transform: rotate(-1.5deg) translateY(0) !important;
+    transform: rotate(-3deg) translateY(0) !important;
     opacity: 1 !important;
 }
 
 .marquee-content {
-    display: inline-block;
-    animation: marquee 15s linear infinite;
+    display: inline-flex;
+    animation: marquee 30s linear infinite;
     font-family: 'Fredoka', sans-serif;
     font-size: 1.2rem;
     text-transform: uppercase;
+    align-items: center;
 }
 
 .marquee-content span {
-    margin: 0 2rem;
+    white-space: nowrap;
+    display: inline-block;
+    padding: 0 1rem;
 }
 
 @keyframes marquee {
