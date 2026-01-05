@@ -259,7 +259,7 @@ window.addEventListener('popstate', (e) => {
 
 // --- OBSERVERS ---
 
-const observerOptions = { threshold: 0.15 };
+const observerOptions = { threshold: 0.1 };
 const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -269,7 +269,7 @@ const observer = new IntersectionObserver((entries) => {
     });
 }, observerOptions);
 
-document.querySelectorAll('.reveal-up, .reveal-left, .reveal-right, .reveal-scale').forEach(el => observer.observe(el));
+document.querySelectorAll('.reveal-up, .reveal-left, .reveal-right, .reveal-scale, .marquee').forEach(el => observer.observe(el));
 
 const counterObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
@@ -507,6 +507,27 @@ document.addEventListener('DOMContentLoaded', () => {
     initHeaderDrag(); // For standalone project pages
     initInfiniteTestimonials(); // Setup infinite cloning
     startTestimonialAutoplay(); // Start testimonials autoplay
+
+    // Mobile Menu Toggle
+    const menuToggle = document.querySelector('.menu-toggle');
+    const mobileMenu = document.querySelector('.mobile-menu');
+    const mobileLinks = document.querySelectorAll('.mobile-nav-links a');
+
+    if (menuToggle && mobileMenu) {
+        menuToggle.addEventListener('click', () => {
+            menuToggle.classList.toggle('active');
+            mobileMenu.classList.toggle('active');
+            document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : 'auto';
+        });
+
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                menuToggle.classList.remove('active');
+                mobileMenu.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            });
+        });
+    }
 });
 
 // --- PARALLAX ---
