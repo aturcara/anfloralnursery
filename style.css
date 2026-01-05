@@ -1366,7 +1366,7 @@ footer {
     .floating-whatsapp { display: none; }
 
     /* Hero Mobile */
-    .hero { min-height: 70vh; padding-top: 4rem; }
+    .hero { min-height: 70vh; padding-top: 3rem; }
     .hero h1 { font-size: 2.8rem; margin-bottom: 1.5rem; }
     .hero p { font-size: 1rem; margin-bottom: 2rem; }
     .hero-image-container { height: 250px; }
