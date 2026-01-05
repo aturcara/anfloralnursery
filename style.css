@@ -986,6 +986,7 @@ a:hover, a:focus, a:active {
 }
 
 .btn-giant {
+    position: relative;
     background-color: var(--yellow);
     color: var(--dark-green);
     padding: 1.2rem 3rem;
@@ -998,6 +999,9 @@ a:hover, a:focus, a:active {
     box-shadow: 0 10px 20px rgba(0,0,0,0.2);
     animation: cta-pulse 2s infinite ease-in-out;
 }
+
+.btn-giant .sparkle-container.left { left: -20px; top: -15px; }
+.btn-giant .sparkle-container.right { right: -20px; bottom: -15px; }
 
 @keyframes cta-pulse {
     0%, 100% { transform: scale(1); }
