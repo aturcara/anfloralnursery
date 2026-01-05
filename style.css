@@ -1071,8 +1071,8 @@ a:hover, a:focus, a:active {
 
 .back-to-top:hover {
     background-color: var(--white);
-    color: var(--primary-green);
-    border-color: var(--primary-green);
+    color: var(--dark-green);
+    border-color: var(--dark-green);
     transform: translateY(-5px);
     box-shadow: 0 15px 40px rgba(0,0,0,0.08);
 }
