@@ -25,6 +25,21 @@
     <link rel="stylesheet" href="assets/css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;600&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script>
+        function handleImageFallback(img) {
+            if (img.src.endsWith('.png')) {
+                img.src = img.src.replace('.png', '.jpg');
+            } else if (!img.dataset.failed) {
+                img.dataset.failed = "true";
+                const greens = ['#2ecc71', '#1a472a', '#2e7d32'];
+                const randomGreen = greens[Math.floor(Math.random() * greens.length)];
+                img.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+                img.style.backgroundColor = randomGreen;
+                img.style.display = 'block';
+                img.style.minHeight = '100%';
+            }
+        }
+    </script>
 </head>
 <body>
 
@@ -70,7 +85,7 @@
         <p class="reveal-up delay-100">Jadikan minat anda terhadap alam semula jadi sebagai kerjaya yang bermakna.</p>
         
         <div class="hero-image-container reveal-scale delay-200">
-            <img src="assets\img\teamwork.png" alt="Teamwork Nature" class="hero-img">
+            <img src="assets/img/teamwork.png" alt="Teamwork Nature" class="hero-img" onerror="handleImageFallback(this)">
         </div>
     </header>
 
@@ -83,7 +98,7 @@
                 <p>Kami mencari individu yang teliti, berdisiplin, dan mempunyai "green fingers" untuk menyertai keluarga besar kami.</p>
             </div>
             <div class="editorial-img-wrapper reveal-right">
-                <img src="assets\img\worktogether.png" alt="Working Together" class="editorial-img">
+                <img src="assets/img/worktogether.png" alt="Working Together" class="editorial-img" onerror="handleImageFallback(this)">
             </div>
         </div>
     </section>
