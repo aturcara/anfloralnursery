@@ -43,7 +43,9 @@ function whatsAppOrder(item) {
  */
 function preloadCalendly() {
     // Only preload if NOT on book.html
-    if (window.location.pathname.includes('book.html')) return;
+    // Use a more robust check that covers variations like /book or /book.html
+    const isBookingPage = window.location.pathname.match(/\/book(\.html)?$/);
+    if (isBookingPage) return;
 
     // Use requestIdleCallback if supported, otherwise a delay to prioritize main content
     const wait = window.requestIdleCallback || ((cb) => setTimeout(cb, 3000));
@@ -62,7 +64,6 @@ function preloadCalendly() {
             const pc = document.createElement('link');
             pc.rel = 'preconnect';
             pc.href = domain;
-            pc.crossOrigin = 'anonymous';
             document.head.appendChild(pc);
         });
 
@@ -477,11 +478,15 @@ const updateActiveCard = () => {
 };
 
 const startTestimonialAutoplay = () => {
+    if (!track) return; // Guard against missing track
     stopTestimonialAutoplay();
     testimonialAutoplayId = setInterval(() => {
         if (isDraggingTrack) return;
-        const card = document.querySelector('.t-card');
-        const gap = parseFloat(window.getComputedStyle(track).gap) || 0;
+        const card = track.querySelector('.t-card');
+        if (!card) return; // Guard against missing cards
+        
+        const style = window.getComputedStyle(track);
+        const gap = parseFloat(style.gap) || 0;
         const step = (card.offsetWidth + gap);
         
         // Move to the next card's centered position
@@ -499,7 +504,7 @@ const stopTestimonialAutoplay = () => {
 let trackStartX;
 let startTranslateX;
 
-if (universe) {
+if (universe && track) {
     const startTrackDrag = (e) => {
         stopTestimonialAutoplay();
         cancelAnimationFrame(rafMomentum);
@@ -516,7 +521,7 @@ if (universe) {
 }
 
 window.addEventListener('mousemove', (e) => {
-    if (!isDraggingTrack) return;
+    if (!isDraggingTrack || !track) return;
     const clientX = e.clientX;
     const now = performance.now();
     
@@ -533,7 +538,7 @@ window.addEventListener('mousemove', (e) => {
 });
 
 window.addEventListener('touchmove', (e) => {
-    if (!isDraggingTrack) return;
+    if (!isDraggingTrack || !track) return;
     const clientX = e.touches[0].clientX;
     const now = performance.now();
     const dt = now - lastDragTime;
@@ -548,7 +553,7 @@ window.addEventListener('touchmove', (e) => {
 }, {passive: false});
 
 const applyMomentum = () => {
-    if (Math.abs(dragVelocity) < 0.1) {
+    if (!track || Math.abs(dragVelocity) < 0.1) {
         snapToCard();
         return;
     }
@@ -560,14 +565,15 @@ const applyMomentum = () => {
 };
 
 const snapToCard = () => {
-    if (!trackBaseWidth) return;
-    const card = document.querySelector('.t-card');
+    if (!track || !trackBaseWidth) return;
+    const card = track.querySelector('.t-card');
+    if (!card) return;
+    
     const cardWidth = card.offsetWidth;
     const gap = parseFloat(window.getComputedStyle(track).gap) || 0;
     const step = cardWidth + gap;
     
     // Find the current index centered in the viewport
-    // Reverse of: currentTranslateX = (viewport / 2) - (index * step + cardWidth / 2)
     const viewportCenter = window.innerWidth / 2;
     const index = Math.round(((viewportCenter - currentTranslateX) - (cardWidth / 2)) / step);
     const targetX = viewportCenter - (index * step + cardWidth / 2);
