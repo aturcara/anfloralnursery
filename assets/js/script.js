@@ -1,6 +1,7 @@
 console.log('Anfloral Script Loaded');
 
 // --- PROJECT DATA ---
+
 const projectData = {
     'villa-tropika': {
         title: 'Villa Tropika',
