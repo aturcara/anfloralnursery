@@ -37,6 +37,57 @@ function whatsAppOrder(item) {
     window.open(finalUrl, '_blank');
 }
 
+/**
+ * Preload Calendly assets and iframe to ensure the booking page feels instant.
+ */
+function preloadCalendly() {
+    // Only preload if NOT on book.html
+    if (window.location.pathname.includes('book.html')) return;
+
+    // Use requestIdleCallback if supported, otherwise a delay to prioritize main content
+    const wait = window.requestIdleCallback || ((cb) => setTimeout(cb, 3000));
+
+    wait(() => {
+        // 1. DNS Prefetch & Preconnect to Calendly domains
+        const domains = ['https://calendly.com', 'https://assets.calendly.com'];
+        domains.forEach(domain => {
+            // DNS Prefetch
+            const dns = document.createElement('link');
+            dns.rel = 'dns-prefetch';
+            dns.href = domain;
+            document.head.appendChild(dns);
+
+            // Preconnect
+            const pc = document.createElement('link');
+            pc.rel = 'preconnect';
+            pc.href = domain;
+            pc.crossOrigin = 'anonymous';
+            document.head.appendChild(pc);
+        });
+
+        // 2. Create a hidden iframe to "warm up" the Calendly URL and cache assets
+        // This makes the transition to book.html nearly instant as resources are already in cache.
+        const iframe = document.createElement('iframe');
+        iframe.src = 'https://calendly.com/nurseryanfloral/booking?hide_event_type_details=1&hide_gdpr_banner=1&background_color=fdfbf7&primary_color=2e7d32';
+        iframe.style.position = 'fixed';
+        iframe.style.top = '-1000px';
+        iframe.style.left = '-1000px';
+        iframe.style.width = '1px';
+        iframe.style.height = '1px';
+        iframe.style.border = 'none';
+        iframe.style.visibility = 'hidden';
+        iframe.style.pointerEvents = 'none';
+        iframe.setAttribute('tabindex', '-1');
+        iframe.setAttribute('aria-hidden', 'true');
+        
+        // Add a small delay for the iframe itself to ensure the main page is fully interactive
+        setTimeout(() => {
+            document.body.appendChild(iframe);
+            console.log('Calendly iframe preloaded');
+        }, 1000);
+    });
+}
+
 // Global state for project header dragging & autoplay
 let isHeaderDragging = false;
 let headerStartX;
@@ -537,6 +588,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initHeaderDrag(); // For standalone project pages
     initInfiniteTestimonials(); // Setup infinite cloning
     startTestimonialAutoplay(); // Start testimonials autoplay
+    preloadCalendly(); // Preload Calendly for faster booking page transition
 
     // Mobile Menu Toggle
     const menuToggle = document.querySelector('.menu-toggle');

@@ -1202,6 +1202,203 @@ a:hover, a:focus, a:active {
     line-height: 1;
 }
 
+/* --- SCHEDULE PAGE STYLES --- */
+.schedule-section {
+    padding: 0 5% 6rem;
+}
+
+.container-narrow {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.booking-card {
+    background: var(--white);
+    padding: 3rem;
+    border: 1px solid rgba(0,0,0,0.05);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.05);
+}
+
+.booking-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.booking-header h2 {
+    font-size: 2.5rem;
+    color: var(--dark-green);
+    margin-bottom: 1rem;
+}
+
+.booking-header p {
+    color: var(--text-light);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.calendar-embed-container {
+    width: 100%;
+    background: #fff;
+    margin-bottom: 3rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.calendar-embed-container iframe, 
+.calendar-embed-container .calendly-inline-widget {
+    width: 100%;
+    min-height: 700px;
+}
+
+.booking-footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    border-top: 1px solid #eee;
+    padding-top: 3rem;
+}
+
+.info-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    background: rgba(46, 204, 113, 0.05);
+    padding: 1.5rem;
+    border-left: 4px solid var(--primary-green);
+    color: var(--dark-green);
+    font-size: 0.95rem;
+    max-width: 700px;
+}
+
+.info-note i {
+    font-size: 1.2rem;
+    margin-top: 3px;
+}
+
+@media screen and (max-width: 768px) {
+    .booking-card { padding: 1.5rem; }
+    .booking-header h2 { font-size: 1.8rem; }
+    .calendar-embed-container iframe,
+    .calendar-embed-container .calendly-inline-widget { 
+        min-height: 500px !important; 
+    }
+}
+
+/* --- BOOKING PAGE REDESIGN (SPLIT VIEW) --- */
+.booking-layout {
+    display: flex;
+    min-height: 80vh;
+    background-color: var(--sand);
+}
+
+.booking-sidebar {
+    flex: 1;
+    padding: 8rem 5% 5rem;
+    display: flex;
+    justify-content: flex-end;
+    background-color: var(--white);
+    border-right: 1px solid rgba(0,0,0,0.05);
+}
+
+.sticky-content {
+    max-width: 450px;
+    position: sticky;
+    top: 150px;
+}
+
+.booking-sidebar h1 {
+    font-size: 3.5rem;
+    line-height: 1.1;
+    color: var(--dark-green);
+    margin-bottom: 2rem;
+}
+
+.booking-sidebar p {
+    font-size: 1.1rem;
+    color: var(--text-light);
+    margin-bottom: 3rem;
+}
+
+.badge {
+    display: inline-block;
+    background: var(--forest-green);
+    color: var(--white);
+    padding: 0.5rem 1.2rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    margin-bottom: 1.5rem;
+}
+
+.benefit-list {
+    margin-bottom: 4rem;
+}
+
+.benefit-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 1rem;
+    font-weight: 600;
+    color: var(--dark-green);
+}
+
+.benefit-item i {
+    color: var(--primary-green);
+}
+
+.contact-mini p {
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+.contact-mini a {
+    color: var(--forest-green);
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: transform 0.3s;
+}
+
+.contact-mini a:hover {
+    transform: translateX(5px);
+}
+
+.booking-widget-area {
+    flex: 1.5;
+    padding: 4rem 2%;
+    background-color: var(--sand);
+}
+
+@media screen and (max-width: 1100px) {
+    .booking-layout { flex-direction: column; }
+    .booking-sidebar { 
+        padding: 6rem 5% 3rem; 
+        justify-content: center;
+        text-align: center;
+        border-right: none;
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+    .sticky-content { max-width: 600px; position: relative; top: 0; }
+    .booking-sidebar h1 { font-size: 2.5rem; }
+    .benefit-list { 
+        display: flex; 
+        flex-wrap: wrap; 
+        justify-content: center; 
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+    .booking-widget-area { padding: 2rem 0; }
+}
+
+@media screen and (max-width: 768px) {
+    .booking-sidebar h1 { font-size: 2rem; }
+}
+
 /* --- FOOTER --- */
 footer {
     background-color: var(--dark-green);
