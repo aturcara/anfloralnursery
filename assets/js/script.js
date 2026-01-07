@@ -593,3 +593,48 @@ window.addEventListener('scroll', () => {
         heroImg.style.transform = `translateY(${window.scrollY * 0.1}px)`;
     }
 });
+
+// --- BUTTERFLY RANDOM MOVEMENT ---
+function startButterflyWandering() {
+    const butterflyContainer = document.querySelector('.butterfly-container');
+    if (!butterflyContainer) return;
+
+    // Listen for fly-in animation end
+    butterflyContainer.addEventListener('animationend', (e) => {
+        if (e.animationName === 'fly-in') {
+            // 1. Freeze the element at the exact position where the CSS animation ended.
+            // This matches the 100% keyframe in style.css: translate(60px, -20px) rotate(90deg)
+            butterflyContainer.style.transform = 'translate(60px, -20px) rotate(90deg)';
+            
+            // 2. Force a reflow/repaint so the browser registers this as the start point
+            void butterflyContainer.offsetWidth;
+
+            // 3. Enable the transition class (which adds transition: transform 3s...)
+            // and remove the animation rule so it doesn't conflict.
+            butterflyContainer.classList.add('wandering');
+            
+            // 4. Start the wandering loop. 
+            // We use a small timeout to ensure the transition class is active before the first move.
+            setTimeout(() => {
+                butterflyWander(butterflyContainer);
+                setInterval(() => butterflyWander(butterflyContainer), 3000);
+            }, 50);
+        }
+    });
+}
+
+function butterflyWander(element) {
+    // Generate random coordinates relative to center (0,0)
+    const x = (Math.random() - 0.5) * 200; 
+    const y = (Math.random() - 0.5) * 100;
+    
+    // Random organic rotation
+    const rotation = Math.random() * 360; 
+
+    element.style.transform = `translate(${x}px, ${y}px) rotate(${rotation}deg)`;
+}
+
+// Initialize butterfly logic
+document.addEventListener('DOMContentLoaded', () => {
+    startButterflyWandering();
+});

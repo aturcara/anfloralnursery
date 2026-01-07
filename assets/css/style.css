@@ -591,6 +591,66 @@ a:hover, a:focus, a:active {
     margin-top: 50px;
 }
 
+/* BUTTERFLY ANIMATION */
+.section-header h2 {
+    position: relative;
+    display: inline-block;
+}
+
+.butterfly-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0; 
+    height: 0;
+    pointer-events: none;
+    z-index: 10;
+    opacity: 0; /* Hidden initially */
+}
+
+/* Trigger animation when parent (.section-header) becomes visible */
+.is-visible .butterfly-container {
+    animation: fly-in 2.5s ease-out forwards;
+}
+
+.butterfly-container.wandering {
+    opacity: 1 !important; /* Ensure it stays visible after animation removal */
+    animation: none !important; /* Stop the fly-in animation lock */
+    transition: transform 3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.butterfly {
+    width: 24px;
+    height: 24px;
+    position: absolute;
+    top: -12px;
+    left: -12px;
+}
+
+.butterfly path {
+    transform-origin: center;
+    animation: flap 0.15s infinite alternate ease-in-out;
+}
+
+@keyframes fly-in {
+    0% {
+        transform: translate(-300px, -200px) rotate(135deg); /* Coming from top-left */
+        opacity: 0;
+    }
+    20% {
+        opacity: 1;
+    }
+    100% {
+        transform: translate(60px, -20px) rotate(90deg); /* Lands near text */
+        opacity: 1;
+    }
+}
+
+@keyframes flap {
+    0% { transform: scaleX(1); }
+    100% { transform: scaleX(0.4); }
+}
+
 /* --- NURSERY EDITORIAL BENTO GRID --- */
 .nursery-bento-section {
     padding: 5rem 0;
