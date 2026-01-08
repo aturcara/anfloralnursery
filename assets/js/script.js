@@ -328,7 +328,7 @@ const observer = new IntersectionObserver((entries) => {
     });
 }, observerOptions);
 
-document.querySelectorAll('.reveal-up, .reveal-left, .reveal-right, .reveal-scale').forEach(el => observer.observe(el));
+document.querySelectorAll('.reveal-up, .reveal-left, .reveal-right, .reveal-scale, .reveal-bounce').forEach(el => observer.observe(el));
 
 // Special observer for marquee to handle translateX(100%) starting position
 const marqueeObserver = new IntersectionObserver((entries) => {
