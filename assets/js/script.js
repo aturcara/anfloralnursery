@@ -620,7 +620,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Back to Top Logic
-    const backToTop = document.getElementById('backToTop');
+    let backToTop = document.getElementById('backToTop');
+    
+    // Auto-inject if missing (ensures consistency across all pages)
+    if (!backToTop) {
+        backToTop = document.createElement('button');
+        backToTop.id = 'backToTop';
+        backToTop.className = 'back-to-top';
+        backToTop.setAttribute('aria-label', 'Back to Top');
+        backToTop.innerHTML = '<i class="fas fa-chevron-up"></i>';
+        document.body.appendChild(backToTop);
+    }
+
     if (backToTop) {
         window.addEventListener('scroll', () => {
             if (window.scrollY > 500) {
